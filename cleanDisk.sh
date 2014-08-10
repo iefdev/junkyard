@@ -6,9 +6,9 @@
 # like: .DS_Store ._ etc.
 #
 # Usage:
-# ~/ShellScripts/cleandisk.sh MyUSBDisk
-# ~/ShellScripts/cleandisk.sh My\ USBdisk		(name with blank step)
-# ~/ShellScripts/cleandisk.sh "My USBdisk"		(name with blank step)
+# ~/ShellScripts/cleanDisk.sh MyUSBDisk
+# ~/ShellScripts/cleanDisk.sh My\ USBdisk		(name with blank step)
+# ~/ShellScripts/cleanDisk.sh "My USBdisk"		(name with blank step)
 
 # Only the name of the disk. In that way we never get to /
 if [ -d /Volumes/"$1" ]; then
