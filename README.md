@@ -11,3 +11,7 @@ It's always good to add that path to PATH _(see /dotfiles/.bashrc)_
 
 	# export PATH.
 	export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+
+
+_...and don't forget to `chmod +x` the files._
+
