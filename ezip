@@ -1,0 +1,103 @@
+#!/bin/bash
+# ------------------------------------------------------------------
+# /usr/local/sbin/ezip
+#
+# version: 2.0
+#
+# author: Eric F
+# copy: (c) 2013, Eric F
+#
+# Description: Simple shellscript to zip files from Terminal, leaving
+# certain files alone. (See more details in: "ReadMe").
+#
+
+# Settings (optional)
+# ------------------------------------------------------------------------------
+NEW="Archive";              # Folder name: Archive
+voice_on=0;                 # Say "Zip'd" or "No File"
+failed_on=1;                # Say "err_msg"
+openup=0;                   # 1 = will open the folder in Finder
+                            # (perhaps using the script in a service).
+
+# Let's do this ...
+# ------------------------------------------------------------------------------
+# Get inside the folder...
+cd `dirname "$1"`;
+
+# ------------------------------------------------------------------------------
+# Multiple folders/files
+# Folder: (Archive, Archive 1, Archive 2 etc)
+# 
+# Maybe not the nicest way to do it (dirty use of "sed"), but it works. It'll look for the
+# lowest available number (Archive, Archive 1, Archive 4 etc) and creates a folder from that.
+#
+if [ "$#" -gt 1 ]; then
+	if [ -e "${NEW[*]}.zip" ]; then
+		numbers=`ls . | grep "${NEW[*]}" | sort -nr | sed "s/$NEW //g" | sed "s/$NEW//g" | sed "s/.zip//g"`;
+		# [!] Sparar nr i (dold) ".tmp", så de sorteras korrekt sen.
+		for nr in "$numbers"; do echo ${nr} >> .tmp; done;
+
+		# Creates a sequnce of 50 to match existing folders.
+		for i in `seq 50`; do
+			# Find the lowest avail. #
+			_nr=( `echo "$i" | grep -v "$i" .tmp | sed "s/[0-9]/$i/g"` );
+			# only send/write the #'s who's NOT in use, to .tmp
+			if [ ! -z "$_nr" ]; then
+				echo "${_nr}" >> .tmp;
+			fi
+		done
+		# REad 2'nd line. That's the lowest #
+		next=`sed -n '2p' .tmp`;
+		rm .tmp;
+		if [ ! "$next" ]; then next="1"; fi
+		FOLDER="$NEW $next";
+		mkdir "$FOLDER";
+	else
+		# No "Archive" before?
+		FOLDER=$NEW;
+		mkdir $FOLDER;
+	fi
+fi
+
+# Initial value (do not change)
+zipped=0;
+
+# Multiple folders/files?
+if [ "$#" -gt 1 ] && [ -e "$FOLDER" ]; then
+	for files in "$@"; do
+		_source=`basename "$files"`;
+		_dest="$FOLDER/$_source";
+		if [ -e "$_source" ]; then cp -R "$_source" "$_dest"; fi
+	done
+	if [ -e "$_dest" ]; then
+		zip -r -o "$FOLDER".zip "$FOLDER" -x "*.DS_*" "*__MACOSX*" "*.Trashes*" "*_notes*" "*.git*" "*.svn*" "*error_log*" "*._*";
+		zipped=1;
+	else
+		_msg="No";
+		zipped=0;
+	fi
+	# Clean up
+	rm -rf "./$FOLDER";
+
+# 1 folder/file
+elif [[ -e $1 ]] && [[ $# == 1 ]]; then
+	# Fix the blanks...
+	_zipfile=`echo $(basename "$1") | sed -e 's/ /\\ /g'`;
+	zip -r -o "$_zipfile".zip "$_zipfile" -x "*.DS_*" "*__MACOSX*" "*.Trashes*" "*_notes*" "*.git*" "*.svn*" "*error_log*" "*._*";
+	zipped=1;
+else
+	# There's nothing todo
+	_msg="No $USER - Try again...";
+	zipped=0;
+fi
+
+# ------------------------------------------------------------------------------
+# Confirm when finished. # Zip'd on success, or the $_msg
+if [ $voice_on == 1 ] && [ $zipped == 1 ]; then
+	say "Zip'd";
+elif [ $voice_on == 1 ] && [ $failed_on == 1 ]; then
+	say $_msg;
+fi
+
+# Open the folder in Finder
+if [ $openup == 1 ]; then open `dirname $1`; fi
