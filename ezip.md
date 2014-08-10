@@ -1,4 +1,4 @@
-ezpi{,1}
+ezip{,1}
 ========
 
 Even if there are great programs that kan pack files and folder - being on OS X we have to deal with the resource files. And sending a zip file with a script for example, with full of those are not so appreciated. There are a few “zip cleaners” to use, but it's better to zip without them from start. _(And why get an xtra app, when you can script it. ^^)_
