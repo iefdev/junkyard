@@ -1,0 +1,225 @@
+#!/bin/bash
+#
+# /usr/local/sbin/chksum
+#
+# Description:    Script to check/verify sha and md5
+#
+_version='1.0.3 (Dec 28, 2013)';    # Sat Dec 28 00:02:28 2013 
+_copy='Copyright (C) 2013 Eric F';
+#
+
+# Display a manual like output
+function __man()
+{
+	cat << MAN
+CHKSUM                                                                  CHKSUM
+
+
+NAME
+       $_base - Check MD5/SHA* Checksums
+
+SYNOPSIS
+       $_base mode checksum file
+       $_base [md5|sha*] filename
+       $_base [md5|sha*] -s filename
+       $_base [-h|-hl|-V]
+
+DESCRIPTION
+       $_base :: Check a MD5/SHA checksum against a file in a simular way like
+       \`shasum -c\`, but with manual inputs.
+
+MODES
+       MD5, SHA*
+
+       * Using \`shasum -a NNN\` (1 (default), 224, 256, 384, 512)
+
+OPTIONS
+       --status
+       -s     It doesn't output anything. A silent mode (returns true/false)
+
+       --help
+       -h     Print out this information. Use -hl or --helpless to get it in a
+              separate view. See EXAMPLES.
+
+       --helpless
+       -hl    Print out this information using "| less".
+
+       --version
+       -V     Print out the version number.
+
+EXAMPLES
+       $_base md5 1234567890qwerty1234567890qwerty foo.bar
+       $_base sha 1234567890qwerty1234567890qwerty12345678 foo.bar
+       $_base sha256 1234567890qwerty...34567890qwerty1234567890qwerty foo.bar
+
+       Status
+       $_base md5 -s 1234567890qwerty1234567890qwerty foo.bar
+
+       \$? will return 0 on success and 1 on no match.
+
+       ---
+
+       $_base --help
+       $_base -h                    # Showing this file
+
+       $_base --helpless
+       $_base -hl                   # Showing this file using (| less).
+                                    # Exit with: q
+
+VERSION INFORMATION
+       $_base: $_version
+
+COPYRIGHT
+       $_copy
+
+
+
+                               27 December 2013                         MD5XUM
+
+[Process completed]
+MAN
+}
+
+# Oops
+function __err()
+{
+	cat << ERR
+/**
+ * :» $_base: No such option. ($_one)
+ * :» Usage:	$_base md5 [-s] checksum file
+ * :» Usage:	$_base sha [-s] checksum file
+ * :» Usage:	$_base sha256 [-s] checksum file
+ * :» Help:	$_base [-h|-hl]
+ */
+ERR
+	exit 1;
+}
+
+function __chk()
+{
+	if [[ $_sum && $_file ]]; then
+		return 0;
+	else
+		echo -e "$n_c$_base$e_c: WARNING: Missing checksum and/or filename."; exit;
+	fi
+}
+
+# MD5
+function __md5()
+{
+	_mode=$_one;
+
+	if [[ $_two == '-s' || $_two == '--status' ]]; then
+		_sum=$_three;
+		_file=$_four;
+
+		# Prevent errmode
+		__chk;
+
+		_chksum=$(md5 -q $_file);
+		if [[ $_sum == $_chksum ]]; then true; else false; fi
+	else
+		_sum=$_two;
+		_file=$_three;
+
+		# Prevent errmode
+		__chk;
+
+		_chksum=$(md5 -q $_file);
+
+		# Nice output.
+		if [[ $_sum == $_chksum ]]; then 
+			echo -e "$_file:\t\t...$g_c OK$e_c";
+		else
+			echo -e "$_file:\t\t...$r_c FAILED$e_c";
+			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_chksum$e_c) did NOT match\n";
+		fi
+	fi
+}
+
+# SHA [sha|sha1|sha224|sha256|sha384|sha512]
+function __sha()
+{
+	# Who's who?
+	if [[ $_two == '-s' || $_two == '--status' ]]; then
+		_sum=$_three;
+		_file=$_four;
+	else
+		_sum=$_two;
+		_file=$_three;
+	fi
+
+	# Prevent errmode
+	__chk;
+
+	# What SHA?
+	if [[ $_one == 'sha' || $_one == 'sha1' ]]; then
+		_chksum=`echo $(shasum $_file) | awk '{ print $1 }'`;
+	else
+		_mode=`echo $_one | sed -e 's/^\(sha\)\(.*\)/\-a\ \2\ /g'`;
+		_chksum=`echo $(shasum $_mode $_file) | awk '{ print $1 }'`;
+	fi
+
+	# Status. Only return true or false
+	if [[ $_two == '-s' || $_two == '--status' ]]; then
+		if [[ $_sum == $_chksum ]]; then true; else false; fi
+	else
+		# Nice output.
+		if [[ $_sum == $_chksum ]]; then 
+			echo -e "$_file:\t\t...$g_c OK$e_c";
+		else
+			echo -e "$_file:\t\t...$r_c FAILED$e_c";
+			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_chksum$e_c) did NOT match\n";
+		fi
+	fi
+}
+
+
+# Vars
+_base=$(basename $0);
+_one="$1";
+_two="$2";
+_three="$3";
+_four="$4";
+
+# Colors
+n_c="\033[0;36m";		# n_c = cyan normal color
+g_c="\033[0;32m";		# g_c = green color
+r_c="\033[0;31m";		# r_c = red color
+e_c="\033[0m";			# e_c = empty color (eg reset)
+
+
+# Let's do this ...
+case $1 in
+
+	# help
+	-h|--help)
+		__man;
+		;;
+
+	# helpless
+	-hl|--helpless)
+		__man | less;
+		;;
+
+	# Version/information
+	-V|--version)
+		echo -e "$n_c$_base$e_c: $_version\n$_copy";
+		;;
+
+	# md5 -q
+	md5)
+		__md5;
+		;;
+
+	# shasum
+	sha|sha1|sha224|sha256|sha384|sha512)
+		__sha;
+		;;
+
+	# Oops...
+	*)
+		__err;
+		;;
+esac
+
