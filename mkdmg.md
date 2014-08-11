@@ -25,8 +25,9 @@ Or create an alias...
 
 Here's a sample output running “mode 2".
 
- - _Mode 1 creates a `.dmg` with same the name as the source._
- - _Mode 2 (the example) you can edit your destination._
+ * _Mode 1 creates a `.dmg` with same the name as the source._
+ * _Mode 2 (the example) you can edit your destination._
+
 
 	[my@terminal] ~$ ~/ShellScripts/mkdmg.sh
 
@@ -47,27 +48,31 @@ Here's a sample output running “mode 2".
 	2) Select other destination/name
 	#? 2
 
-	Destination...
 
-	  :» Disk name: "`basename $_folder`.dmg". If you'd like another name of the disk,
-	  :» write that in the end (+ .dmg). Exampel: "Backup.dmg"
+```
+Destination...
 
-	You can type the path in, or just drag'n'drop it into the terminal window.
+  :» Disk name: "`basename $_folder`.dmg". If you'd like another name of the disk,
+  :» write that in the end (+ .dmg). Exampel: "Backup.dmg"
 
-	Enter destination: fooBar.dmg
+You can type the path in, or just drag'n'drop it into the terminal window.
 
-	Folder: /Users/FooBar/ShellScripts/testfolder
-	Destination: fooBar.dmg
-	  :» Creating disk: fooBar.dmg ...
+Enter destination: fooBar.dmg
 
-	Password:
-	---------
-	Enter a new password to secure "fooBar.dmg":
-	Re-enter new password:
-	..
-	created: /Users/FooBar/ShellScripts/fooBar.dmg
+Folder: /Users/FooBar/ShellScripts/testfolder
+Destination: fooBar.dmg
+  :» Creating disk: fooBar.dmg ...
 
-	---
-	Going to the disk ...
+Password:
+---------
+Enter a new password to secure "fooBar.dmg":
+Re-enter new password:
+..
+created: /Users/FooBar/ShellScripts/fooBar.dmg
+
+---
+Going to the disk ...
+
+```
 
 _... = reveals the disk in Finder._
