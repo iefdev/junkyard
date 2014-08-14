@@ -1,12 +1,12 @@
 #!/bin/bash
 # ------------------------------------------------------------------
-# Shellscript for Webkit2png (http://www.paulhammond.org/webkit2png/)
+# Shell script for Webkit2png (http://www.paulhammond.org/webkit2png/)
 #
 # © 2012, Eric F
 #
 # Options:
 # ----------
-# Edit the options to your needs. To fid all options,
+# Edit the options to your needs. To find all options,
 # see: webkit2png --help
 #
 # "My defaults": With "-W 960", the thumbs get 250px wide
