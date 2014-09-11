@@ -8,6 +8,7 @@ _version='1.0.1 (Sept 11, 2014)';		# September 11, 2014 - 03:59:19
 _copy='Copyright (C) 2014, Eric F';
 #
 
+
 # vars
 _mode=$1;
 _base=`basename $0`;
@@ -16,6 +17,7 @@ _text='/usr/X11/share/X11/rgb.txt';
 cy="\033[0;36m";		# cy = cyan normal color
 cl="\033[0m";		# cl = empty color (eg reset)
 _a='';
+
 
 # Function __help()
 function __help()
@@ -84,6 +86,7 @@ case $_mode in
 		;;
 esac
 
+
 # Output
 _top="\n# RGB$_a\t\t\t\t/* Name(s) */";
 _line='# -------------------------------------------------- #\n';
@@ -92,7 +95,8 @@ echo -e "$_top";
 echo -e $_line;
 
 for _col in ${@}; do
-echo -e "# $_col:";
+
+	echo -e "# $_col:";
 
 	if [[ $_mode == '-a' ]]; then # rgba
 
