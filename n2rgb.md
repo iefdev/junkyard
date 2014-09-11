@@ -104,7 +104,7 @@ Will produce a list of:
 
 ### X11
 
-If you don't have X11 installed, and/or if my path doesn't match your system. Please edit the file (~ line: [14-15][path]), and comment/uncomment the lines to match your choice or path.
+If you don't have X11 installed, and/or if my path doesn't match your system. Please edit the file (~ line: [15-16][path]), and comment/uncomment the lines to match your choice or path.
 
 
-[path]: https://github.com/iEFdev/junkyard/blob/master/n2rgb#L14-15
+[path]: https://github.com/iEFdev/junkyard/blob/master/n2rgb#L15-16
