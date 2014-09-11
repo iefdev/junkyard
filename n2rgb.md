@@ -3,7 +3,7 @@ n2rgb
 
 This is just a small script to grab preformatted rgb(a) values from a file. It'll return rgb(a) values to just copy and paste. The script is using `awk` to filter the values, so searching for “red” will match all names with “red” in it. _(see Example 1-2)_
 
-In X11 there's a great file with a list of colornames and their values. In my OS X, the file location for that file is:
+In X11 there's a great file with a list of color names and their values. In my OS X, the file location for that file is:
 
 ```
 /usr/X11/share/X11/rgb.txt
