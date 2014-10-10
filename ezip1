@@ -1,6 +1,7 @@
 #!/bin/bash
 # ------------------------------------------------------------------
-# ezip1
+#
+# /usr/local/xbin/ezip1
 #
 # Simple shellscript to zip files from Terminal, leaving
 # certain files alone. (Handles only 1 folder).

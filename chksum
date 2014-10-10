@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# /usr/local/sbin/chksum
+# /usr/local/xbin/chksum
 #
 # Description:    Script to check/verify sha and md5
 #

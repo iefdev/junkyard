@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# /usr/local/bin/n2rgb
+# /usr/local/xbin/n2rgb
 #
 # Description: web color names -> rgb(a) values
 #
