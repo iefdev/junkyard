@@ -17,10 +17,10 @@ _Only tested in OS X. Please report if it works elsewhere._
 
 ### Install
 
-Put the script in `/usr/local/bin`, or any folder of your choice. Just make sure it's in `$PATH`.
+Put the script in `/usr/local/xbin`, or any folder of your choice. Just make sure it's in `$PATH`.
 
-	sudo cp n2rgb /usr/local/bin
-	chmod +x /usr/local/bin/n2rgb
+	sudo cp n2rgb /usr/local/xbin
+	chmod +x /usr/local/xbin/n2rgb
 
 
 

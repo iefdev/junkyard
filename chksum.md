@@ -1,11 +1,17 @@
 chksum
-======
+------
 
 A small script to check md5/sha* checksum when downloading something, where they offer a checksum to verify against.
 
+
+
 ### Install
 
-Put the script in `/usr/local/sbin`, and give it execute permissions (`chmod +x`).
+Put the script in `/usr/local/xbin`, or any folder of your choice. Just make sure it's in `$PATH`.
+
+Give it execute permissions (`chmod +x`).
+
+
 
 ### Usage
 

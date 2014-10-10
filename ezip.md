@@ -9,9 +9,15 @@ One folder/file will zip into: _foldername.zip_ while multiple files/folders wil
 
 _It's nothing fancy or anything... Just a working script that suited my needs._
 
+
+
 ### Install
 
-Put the script(s) in `/usr/local/sbin`, and give it execute permissions (`chmod +x`).
+Put the script(s) in `/usr/local/xbin`, or any folder of your choice. Just make sure it's in `$PATH`.
+
+Give it execute permissions (`chmod +x`).
+
+
 
 ### Usage
 
