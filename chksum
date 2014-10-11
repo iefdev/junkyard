@@ -132,7 +132,7 @@ function __md5()
 			echo -e "$_file:\t\t...$g_c OK$e_c";
 		else
 			echo -e "$_file:\t\t...$r_c FAILED$e_c";
-			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_chksum$e_c) did NOT match\n";
+			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_sum$e_c) did NOT match\n";
 		fi
 	fi
 }
@@ -169,7 +169,7 @@ function __sha()
 			echo -e "$_file:\t\t...$g_c OK$e_c";
 		else
 			echo -e "$_file:\t\t...$r_c FAILED$e_c";
-			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_chksum$e_c) did NOT match\n";
+			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_sum$e_c) did NOT match\n";
 		fi
 	fi
 }

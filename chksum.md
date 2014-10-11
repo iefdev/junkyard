@@ -20,3 +20,21 @@ Give it execute permissions (`chmod +x`).
 	chksum sha256 [-s] <checksum> file	# or any other "sha*"
 	chksum [-h|-hl]
 
+
+
+### Example
+
+Succes:
+
+	[me@myhost] ~$ chksum sha da39a3ee5e6b4b0d3255bfef95601890afd80709 test.txt
+	test.txt:		... OK
+	[me@myhost] ~$
+
+Error:
+
+	[me@myhost] ~$ chksum sha da39a3ee5e6b4b0d3255bfef95601890afd80708 test.txt
+	test.txt:		... FAILED
+
+	chksum: WARNING: The checksum (da39a3ee5e6b4b0d3255bfef95601890afd80708) did NOT match
+
+	[me@myhost] ~$
