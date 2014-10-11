@@ -24,7 +24,7 @@ Give it execute permissions (`chmod +x`).
 
 ### Example
 
-Succes:
+Success:
 
 	[me@myhost] ~$ chksum sha da39a3ee5e6b4b0d3255bfef95601890afd80709 test.txt
 	test.txt:		... OK
