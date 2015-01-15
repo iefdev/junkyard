@@ -1,12 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # /usr/local/xbin/chksum
 #
 # Description:    Script to check/verify sha and md5
 #
-_version='1.0.3 (Dec 28, 2013)';    # Sat Dec 28 00:02:28 2013 
-_copy='Copyright (C) 2013 Eric F';
-#
+# Version & copy:
+_version='0.beta-1';
+_date='2015-01-15';   # January 15, 2015 14:49:10  GMT+01:00
+_copy='Copyright (c) 2015, Eric F'
+
 
 # Display a manual like output
 function __man()
@@ -20,8 +22,7 @@ NAME
 
 SYNOPSIS
        $_base mode checksum file
-       $_base [md5|sha*] filename
-       $_base [md5|sha*] -s filename
+       $_base [md5|sha|sha1|sha224|sha256|sha384|sha512] [-s] filename
        $_base [-h|-hl|-V]
 
 DESCRIPTION
@@ -74,21 +75,21 @@ COPYRIGHT
 
 
 
-                               27 December 2013                         MD5XUM
+                               15 January 2015                          CHKSUM
 
-[Process completed]
 MAN
 }
+
 
 # Oops
 function __err()
 {
+	[[ $_one != '-h' || $_one != '-hl' ]] && _optline=$(echo -e "\n * :» ${_red}$_base${_def}: No such option. ($_one)");
+
 	cat << ERR
-/**
- * :» $_base: No such option. ($_one)
+/**$_optline
  * :» Usage:	$_base md5 [-s] checksum file
- * :» Usage:	$_base sha [-s] checksum file
- * :» Usage:	$_base sha256 [-s] checksum file
+ * :» Usage:	$_base sha[1|224|256|384|512] [-s] checksum file
  * :» Help:	$_base [-h|-hl]
  */
 ERR
@@ -100,9 +101,10 @@ function __chk()
 	if [[ $_sum && $_file ]]; then
 		return 0;
 	else
-		echo -e "$n_c$_base$e_c: WARNING: Missing checksum and/or filename."; exit;
+		echo -e "$_cyan$_base$_def: WARNING: Missing checksum and/or filename."; exit;
 	fi
 }
+
 
 # MD5
 function __md5()
@@ -129,13 +131,14 @@ function __md5()
 
 		# Nice output.
 		if [[ $_sum == $_chksum ]]; then 
-			echo -e "$_file:\t\t...$g_c OK$e_c";
+			echo -e "$_file:\t\t...$_green OK$_def";
 		else
-			echo -e "$_file:\t\t...$r_c FAILED$e_c";
-			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_sum$e_c) did NOT match\n";
+			echo -e "$_file:\t\t...$_red FAILED$_def";
+			echo -e "\n$_cyan$_base$_def: WARNING: The checksum ($_red$_sum$_def) did NOT match\n";
 		fi
 	fi
 }
+
 
 # SHA [sha|sha1|sha224|sha256|sha384|sha512]
 function __sha()
@@ -166,10 +169,10 @@ function __sha()
 	else
 		# Nice output.
 		if [[ $_sum == $_chksum ]]; then 
-			echo -e "$_file:\t\t...$g_c OK$e_c";
+			echo -e "$_file:\t\t...$_green OK$_def";
 		else
-			echo -e "$_file:\t\t...$r_c FAILED$e_c";
-			echo -e "\n$n_c$_base$e_c: WARNING: The checksum ($r_c$_sum$e_c) did NOT match\n";
+			echo -e "$_file:\t\t...$_red FAILED$_def";
+			echo -e "\n$_cyan$_base$_def: WARNING: The checksum ($_red$_sum$_def) did NOT match\n";
 		fi
 	fi
 }
@@ -182,11 +185,12 @@ _two="$2";
 _three="$3";
 _four="$4";
 
+
 # Colors
-n_c="\033[0;36m";		# n_c = cyan normal color
-g_c="\033[0;32m";		# g_c = green color
-r_c="\033[0;31m";		# r_c = red color
-e_c="\033[0m";			# e_c = empty color (eg reset)
+_cyan="\033[0;36m";		# cyan = cyan normal color
+_green="\033[0;32m";	# green = green color
+_red="\033[0;31m";		# red = red color
+_def="\033[0m";			# _def = empty color (eg reset)
 
 
 # Let's do this ...
@@ -204,7 +208,7 @@ case $1 in
 
 	# Version/information
 	-V|--version)
-		echo -e "$n_c$_base$e_c: $_version\n$_copy";
+		echo "$_base: version $_version, $_copy";
 		;;
 
 	# md5 -q
@@ -222,4 +226,3 @@ case $1 in
 		__err;
 		;;
 esac
-

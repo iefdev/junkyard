@@ -15,9 +15,8 @@ Give it execute permissions (`chmod +x`).
 
 ### Usage
 
-	chksum md5 [-s] <checksum> file
-	chksum sha [-s] <checksum> file
-	chksum sha256 [-s] <checksum> file	# or any other "sha*"
+	chksum md5 [-s] checksum file
+	chksum sha[1|224|256|384|512] [-s] checksum file
 	chksum [-h|-hl]
 
 
@@ -38,3 +37,4 @@ Error:
 	chksum: WARNING: The checksum (da39a3ee5e6b4b0d3255bfef95601890afd80708) did NOT match
 
 	[me@myhost] ~$
+	
