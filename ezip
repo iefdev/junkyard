@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ------------------------------------------------------------------
 #
 # /usr/local/xbin/ezip
@@ -6,7 +6,7 @@
 # version: 2.0
 #
 # author: Eric F
-# copy: (c) 2013, Eric F
+# copy: (c) 2015, Eric F
 #
 # Description: Simple shellscript to zip files from Terminal, leaving
 # certain files alone. (See more details in: "ReadMe").
@@ -47,7 +47,7 @@ if [ "$#" -gt 1 ]; then
 				echo "${_nr}" >> .tmp;
 			fi
 		done
-		# REad 2'nd line. That's the lowest #
+		# Read 2'nd line. That's the lowest #
 		next=`sed -n '2p' .tmp`;
 		rm .tmp;
 		if [ ! "$next" ]; then next="1"; fi
