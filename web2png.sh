@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ------------------------------------------------------------------
 # Shell script for Webkit2png (http://www.paulhammond.org/webkit2png/)
 #
@@ -37,4 +37,3 @@ if python $WEB2PNG $OPTIONS $WWW; then
 		# Reveal in Finder
 		open -R $FOLDER;
 fi
-
