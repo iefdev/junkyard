@@ -155,14 +155,14 @@ Usage:
   $_base                # going through all settings, 1-by-1
 
   # Interactive
-  $_base -folder
+  $_base -location
   $_base -name
   $_base -type
   $_base -shadow
 
   # Direct, if you now your settings:
   # (examples)
-  $_base -f "/path/to/folder"
+  $_base -l "/path/to/folder"
   $_base -n "Prefix"
   $_base -t png
   $_base -s true
@@ -211,8 +211,9 @@ function __err()
 	[[ $_one != '-info' ]] && _optline=$(echo -e "\n * :» ${_red}$_base${_def}: No such option ($_one)");
 
 	cat << ERR
- * :» Usage (normal): $_base [-folder][-type][-name][-shadow][-read]
- * :» QuickMode:      $_base [-f][-t][-n][-s] <value>
+/**$_optline
+ * :» Usage (normal): $_base [-location][-type][-name][-shadow][-read]
+ * :» QuickMode:      $_base [-l][-t][-n][-s] <value>
  * :» Help:           $_base [-h|-help|-hl|--helpless]
  * :» Version:        $_base [-V|--version]
  * :» Info:           $_base [-info]
@@ -267,7 +268,7 @@ TYPE
 	cat << NAME
 ------------------------------------------------
 
-You can set a image prefix. Default in OS X is: "Screen-shot".
+You can set an image prefix. Default in OS X is: "Screen-shot".
 
 Avoid latin letters and special characters. They are not too good for
 uploads on the internet.
@@ -318,7 +319,7 @@ else
 	case $1 in
 
 		# Folder
-		-folder)
+		-location)
 			__location;
 			killall SystemUIServer;
 			if [[ -d `defaults read $defFile $defLoc` ]]; then
@@ -377,7 +378,7 @@ else
 
 		### QuickMode ###
 		# Location
-		-f)
+		-l)
 			defaults write $defFile location -string $2 && __sysUI;
 			;;
 
