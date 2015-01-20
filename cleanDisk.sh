@@ -22,10 +22,10 @@ fi
 # .DS_Store
 echo -e '\nDeleting all .DS_Store (recursively): ';
 find ./ -name ".DS_Store" -delete;
-#find ./ "-name" ".DS_Store" -exec rm {} \;		# generic unix way	
+#find ./ "-name" ".DS_Store" -exec rm {} \;		# generic unix way
 
 # ._* (eg. ._file1, ._file2 etc)
-echo 'Deleting all ._\* (rekursivt): ';
+echo 'Deleting all ._\* (recursively): ';
 find ./ -name "._*" -delete;
 #find ./ "-name" "._*" -exec rm {} \;			# generic unix way
 
