@@ -3,8 +3,8 @@
 # /usr/local/bin/md5
 #
 # Description: (2015-03-19)
-# Dirty hack to get "md5" (OS X style) onboard. Linux only have "md5sum",
-# and (we) will need this script to use with "chksum".
+# Dirty hack to get "md5" (OS X style) onboard. Linux have "md5sum",
+# so as a wrapper &/or to use with other scripts as a layer.
 #
 # --------------------------------------------------------------------------
 #
@@ -17,6 +17,7 @@ if [[ ! `type md5sum 2>/dev/null` ]]; then
 	exit;
 fi
 
+# What mode?
 case $1 in
 
 	# OS X man page:

@@ -1,9 +1,10 @@
 MD5
 ===
->_bash script/wrapper for md5sum_
+
+> _bash script/wrapper for md5sum_
 
 
-This is just a _dirty hack_ to get "md5" onboard my Linux machine(s). Linux only have "md5sum", and I needed this script to use with "chksum".
+This is just a _dirty hack_ to get "md5" onboard my Linux machine(s). Linux have "md5sum", so as a wrapper &/or to use with other scripts as a layer.
 
 It doesn't bring all options, but the 3 options are:
 

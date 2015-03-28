@@ -1,8 +1,12 @@
 chksum
-------
+======
 
 A small script to check md5/sha* checksum when downloading something, where they offer a checksum to verify against.
 
+The scipt have been made _(updated)_ to work with both OS X and Linux:
+
+- OS X: `md5` and `shasum`
+- Linux: `md5sum` and `sha{1,224,256,384,256,512}sum`
 
 
 ### Install
