@@ -2,7 +2,7 @@
 #
 # /usr/local/bin/md5
 #
-# Description: (2015-03-19)
+# Description: (2015-03-28)
 # Dirty hack to get "md5" (OS X style) onboard. Linux have "md5sum",
 # so as a wrapper &/or to use with other scripts as a layer.
 #
