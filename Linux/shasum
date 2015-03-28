@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# /usr/local/bin/shasum
+#
+# Description: (2015-03-28)
+# Dirty hack to get "shasum" (OS X style) onboard. Linux have "shaNNNsum",
+# so as a wrapper &/or to use with other scripts as a layer.
+#
+# --------------------------------------------------------------------------
+#
+# OS X shasum(1): https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/shasum.1.html
+#
+
+# What SHA? No option defaults to SHA1
+#
+# OS X manual:
+#	-a, --algorithm    1 (default), 224, 256, 384, 512
+#
+if [[ $1 =~ ('-a'|'--algorithm') ]]; then
+	_mode=$2;
+	shift 2;
+else
+	_mode=1;
+fi
+
+# Just in case...
+if [[ ! `type sha${_mode}sum 2>/dev/null` ]]; then
+	echo "-$(basename $SHELL): sha${_mode}sum: command not found";
+	exit;
+fi
+
+# Look for "-s"
+case $1 in
+
+	# OS X have an xtra "-s"
+	-s)
+		shift;
+		sha${_mode}sum --status $@;
+		;;
+
+	# Normal use
+	*)
+		sha${_mode}sum $@
+		;;
+esac
+
+# Bye-bye...
+exit;
