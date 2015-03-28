@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#
+# /usr/local/bin/md5
+#
+# Description: (2015-03-19)
+# Dirty hack to get "md5" (OS X style) onboard. Linux only have "md5sum",
+# and (we) will need this script to use with "chksum".
+#
+# --------------------------------------------------------------------------
+#
+# OS X md5(1): https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/md5.1.html
+#
+
+# Just in case...
+if [[ ! `type md5sum 2>/dev/null` ]]; then
+	echo "'md5sum' is not installed. Aborting...";
+	exit;
+fi
+
+case $1 in
+
+	# OS X man page:
+	# -s string
+    #         Print a checksum of the given string.
+	-s)
+		shift;
+		_text="$1"
+		_md5=$(echo -n "$1" | md5sum -t | awk '{ print $1 }');
+		echo "MD5 (\"$_text\") = $_md5";
+		;;
+
+    # OS X man page:
+    # -q      Quiet mode - only the checksum is printed out.  Overrides the -r
+    #         option.
+    -q)
+        shift;
+        md5sum $@ | awk '{ print $1 }';
+        ;;
+
+	# OS X man page:
+	# -r      Reverses the format of the output.  This helps with visual diffs.
+	#         Does nothing when combined with the -ptx options.
+	#
+	# Output is same as md5sum --text
+	-r)
+		shift;
+		md5sum $@;
+		;;
+
+	# Linux man page:
+	# --tag  create a BSD-style checksum
+	*)
+		md5sum --tag $@
+		;;
+esac
+
+# Bye-bye...
+exit;

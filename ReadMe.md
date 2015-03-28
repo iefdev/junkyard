@@ -3,6 +3,10 @@ junkyard
 
 Just a few shell/bash-scripts I use or made for various reasions. Some of them initially made for others, as helpers, but most for my own usage. I'll try to make a separate `readme.md` for each script.
 
+Most are made for OS X, but could work on other platforms as well. I'll keep a few ones in a Linux folder.
+
+
+
 ### Locations
 
 Most scripts lives in `~/ShellScripts` (it's good practice to use a common folder), while other scripts are put in `/usr/local/xbin`. For custom made scripts I use a separate folder to keep them out from other ones.
