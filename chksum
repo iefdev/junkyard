@@ -2,11 +2,11 @@
 #
 # /usr/local/xbin/chksum
 #
-# Description:    Script to check/verify sha and md5
+# Description: Script to check/verify sha and md5.
 #
 # Version & copy:
-_version='0.beta-1';
-_date='2015-01-15';   # January 15, 2015 14:49:10  GMT+01:00
+_version='0.beta-2';
+_date='2015-03-28';   # March 28, 2015 21:08:08  GMT+01:00
 _copy='Copyright (c) 2015, Eric F'
 
 
@@ -118,7 +118,10 @@ function __md5()
 		# Prevent errmode
 		__chk;
 
-		_chksum=$(md5 -q $_file);
+		# OS X or Linux
+		if [[ `type md5 2>/dev/null` ]]; then _chksum=$(md5 -q $_file);
+		elif [[ `type md5sum 2>/dev/null` ]]; then _chksum=$(md5sum $_file | awk '{ print $1 }'); fi
+
 		if [[ $_sum == $_chksum ]]; then true; else false; fi
 	else
 		_sum=$_two;
@@ -127,7 +130,9 @@ function __md5()
 		# Prevent errmode
 		__chk;
 
-		_chksum=$(md5 -q $_file);
+		# OS X or Linux
+		if [[ `type md5 2>/dev/null` ]]; then _chksum=$(md5 -q $_file);
+		elif [[ `type md5sum 2>/dev/null` ]]; then _chksum=$(md5sum $_file | awk '{ print $1 }'); fi
 
 		# Nice output.
 		if [[ $_sum == $_chksum ]]; then 
@@ -158,9 +163,22 @@ function __sha()
 	# What SHA?
 	if [[ $_one == 'sha' || $_one == 'sha1' ]]; then
 		_chksum=`echo $(shasum $_file) | awk '{ print $1 }'`;
+
+		# OS X use 'shasum'
+		if [[ `type shasum 2>/dev/null` ]]; then
+			_chksum=`echo $(shasum $_file) | awk '{ print $1 }'`;
+		elif [[ `type sha1sum 2>/dev/null` ]]; then
+			_chksum=`echo $(sha1sum $_file) | awk '{ print $1 }'`;
+		fi
 	else
 		_mode=`echo $_one | sed -e 's/^\(sha\)\(.*\)/\-a\ \2\ /g'`;
-		_chksum=`echo $(shasum $_mode $_file) | awk '{ print $1 }'`;
+
+		# OS X use 'shasum -a NNN'
+		if [[ `type shasum 2>/dev/null` ]]; then
+			_chksum=`echo $(shasum $_mode $_file) | awk '{ print $1 }'`;
+		elif [[ `type ${_mode}sum 2>/dev/null` ]]; then
+			_chksum=`echo $(${_mode}sum $_file) | awk '{ print $1 }'`;
+		fi
 	fi
 
 	# Status. Only return true or false
