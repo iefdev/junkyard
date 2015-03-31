@@ -162,7 +162,6 @@ function __sha()
 
 	# What SHA?
 	if [[ $_one == 'sha' || $_one == 'sha1' ]]; then
-		_chksum=`echo $(shasum $_file) | awk '{ print $1 }'`;
 
 		# OS X use 'shasum'
 		if [[ `type shasum 2>/dev/null` ]]; then
