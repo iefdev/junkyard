@@ -6,14 +6,14 @@ SHASUM
 
 This is just a _dirty hack_ to get "shasum" onboard my Linux machine(s). Linux have "shaNNNsum", so as a wrapper &/or to use with other scripts as a layer.
 
-It doesn't bring all options, but the 3 options are:
+It doesn't bring all options, but the 2 options are:
 
 |                   |                                 |
 | :---------------- | :------------------------------ |
 | `-a, --algorithm` | 1 (default), 224, 256, 384, 512 |
 | `-s, --status`    | OS X has an xtra `-s`           |
 
-Besides that, use it as normal.
+Besides that, whithout options... Use it as a normal `sha1sum` which is the default mode.
 
  
 
