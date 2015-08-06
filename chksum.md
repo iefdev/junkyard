@@ -1,6 +1,8 @@
 chksum
 ======
 
+> _This one is going away, and relocated into a new repo: <https://github.com/iEFdev/chksum>_
+
 A small script to check md5/sha* checksum when downloading something, where they offer a checksum to verify against.
 
 The scipt have been made _(updated)_ to work with both OS X and Linux:
