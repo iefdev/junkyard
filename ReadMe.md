@@ -23,4 +23,4 @@ Don't forget to `chmod +x` your files.
 
 ### @todo
 
-- [ ] Move “md-files” to Wiki instead.
+- [x] Move “md-files” to Wiki instead. _(In progress...)_
