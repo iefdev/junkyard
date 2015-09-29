@@ -18,15 +18,15 @@ _file=$(basename "$1");
 
 if [[ `uname` == 'Darwin' ]]; then
 	if [[ `type convert 2> /dev/null` ]]; then
-		convert -quality $_q "$1" "${1%.*}.jpg";
+		convert -background white -alpha remove -quality $_q "$1" "${1%.*}.jpg";
 		echo -e "$1\n  ${1%.*}.jpg";
 	else
 		sips -s format jpeg -s formatOptions $_q "$1" --out "${1%.*}.jpg" 2> /dev/null;
 	fi
 else	
-	_msg="$FUNCNAME: Can't find 'convert'. Please install ImageMagick...";
+	_msg="$(basename $0): Can't find 'convert'. Please install ImageMagick...";
 	[[ ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
-	convert -quality $_q "$1" "${1%.*}.jpg";
+	convert -background white -alpha remove -quality $_q "$1" "${1%.*}.jpg";
 	echo -e "$1\n  ${1%.*}.jpg";
 fi
 
