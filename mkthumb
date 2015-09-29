@@ -26,7 +26,7 @@ if [[ `uname` == 'Darwin' ]]; then
 		sips -Z ${_px} -s formatOptions best "$1" --out "${1%.*}_${_px}px$_ext" 2> /dev/null;
 	fi
 else	
-	_msg="$FUNCNAME: Can't find 'convert'. Please install ImageMagick...";
+	_msg="$(basename $0): Can't find 'convert'. Please install ImageMagick...";
 	[[ ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
 	convert -resize ${_px}x${_px} -quality 100 "$1" "${1%.*}_${_px}px$_ext";
 	echo -e "$1\n  ${1%.*}_${_px}px$_ext";
