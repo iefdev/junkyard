@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin
+#
+# Description:
+# Convert image to jpeg.
+# Quality (defaults) to 100%.
+#
+# Script is using 'convert' (ImageMagick).
+# On OS X, it uses 'convert' if installed with a fallback on 'sips' (bundled).
+#
+# Usage:
+# 	mkjpg file.png [<procent>]
+#
+
+[[ $2 && $2 -lt 100 ]] && _q=$2 || _q=100;
+_file=$(basename "$1");
+
+if [[ `uname` == 'Darwin' ]]; then
+	if [[ `type convert 2> /dev/null` ]]; then
+		convert -quality $_q "$1" "${1%.*}.jpg";
+		echo -e "$1\n  ${1%.*}.jpg";
+	else
+		sips -s format jpeg -s formatOptions $_q "$1" --out "${1%.*}.jpg" 2> /dev/null;
+	fi
+else	
+	_msg="$FUNCNAME: Can't find 'convert'. Please install ImageMagick...";
+	[[ ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
+	convert -quality $_q "$1" "${1%.*}.jpg";
+	echo -e "$1\n  ${1%.*}.jpg";
+fi
+
