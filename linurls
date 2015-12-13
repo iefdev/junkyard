@@ -26,8 +26,14 @@ find . -name "*.webloc" | while read _file; do
 	dtFile=`echo "${fileOut}" | sed 's/webloc/desktop/'`;
 	dtName=`basename "${fileOut}" | sed 's/.webloc//'`;
 
-	# get url
-	dtUrl=`cat "${_file}" | grep -i '<string>.*<\/string>' | sed 's/^.*<string>//;s/<\/string>$//'`;
+	# make sure the file(s) are XML, and get the url
+	plutil -convert xml1 "${_file}";
+	dtUrl=`cat "${_file}" | grep -i '<string>.*<\/string>' | sed 's/^.*<string>//;s/<\/string>$//'` 2> /dev/null;
+
+	# Having some old ones where they are in "/rsrc"... Try DeRez before dumping them to the log.
+	if [[ -z "${dtUrl}" ]] ; then
+		dtUrl=`DeRez -e -only url "${_file}" | sed -e 's/.*\/\* \(.*\) \*\//\1/' | sed -e :a -e '$!N; s/\n//; ta' -e 's/^.*{\(.*\)};/\1/'`;
+	fi
 
 	# Pass path/filename to logfile if it fails.
 	if [[ -z "${dtUrl}" ]] ; then
@@ -42,7 +48,6 @@ Type=Link
 Icon=text-html
 Name=$dtName
 URL=$dtUrl
-
 WEBLOC
 
 		# Delete the webloc fileOut
