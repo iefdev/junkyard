@@ -8,12 +8,14 @@
 # It's been made for my own personal use.
 #
 
-# Put a log on Desktop of the ones who didn't make it.
-dtLog="$HOME/desktop/"$(basename $0)'_log.txt';
-#dtLog="./urls/"$(basename $0)'_log.txt';
+# Put a log in current directory of the ones who didn't make it.
+dtLog='./'$(basename $0)'_log.txt';
+
 echo -e "/* These \"weblocs\" didn't convert into \".desktop\" */\n\n- - -\n\n" > "${dtLog}";
 
+# Find all weblocs...
 find . -name "*.webloc" | while read _file; do
+
 	# Clean up names (:/ -> -). More chars?
 	cleanUp=`basename "$(echo "${_file}")" | sed 's/[\/\:]/\-/g'`;
 
@@ -27,11 +29,12 @@ find . -name "*.webloc" | while read _file; do
 	# get url
 	dtUrl=`cat "${_file}" | grep -i '<string>.*<\/string>' | sed 's/^.*<string>//;s/<\/string>$//'`;
 
-	# If failing - put the path to the link in a log file.
+	# Pass path/filename to logfile if it fails.
 	if [[ -z "${dtUrl}" ]] ; then
-		# Pass filename to logfile if it fails.
 		echo "${_file}" >> "${dtLog}";
 	else
+
+		# Just follow the freedesktop standard...
 		cat << WEBLOC > "${dtFile}"
 [Desktop Entry]
 Encoding=UTF-8
@@ -46,9 +49,11 @@ WEBLOC
 		echo -n 'Deleting: ';
 		rm -v "${_file}";
 	fi
-
 done
 
-# Add date to log
+# Add date to the log
 echo -e "\n\n" >> "${dtLog}";
 date "+Log created: %F at %X" >> "${dtLog}";
+
+# Reveal the logfile in Finder
+open -R ${dtLog};
