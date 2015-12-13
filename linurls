@@ -2,7 +2,9 @@
 #
 # /usr/local/xbin
 #
-# Description: # Script to convert OS X .webloc's into Linux .desktop files
+# Description: Script to convert OS X .webloc's into Linux .desktop files
+# (To use .desktop in Firefox/OS X, just open an info window, changing the
+# program to FF and apply/change all. :))
 #
 # Disclainer: You use this script AT YOUR OWN RISK, and it comes with NO WARRANTY.
 # It's been made for my own personal use.
@@ -50,9 +52,12 @@ Name=$dtName
 URL=$dtUrl
 WEBLOC
 
-		# Delete the webloc fileOut
-		echo -n 'Deleting: ';
-		rm -v "${_file}";
+		# Only delete old webloc if the new has been created.
+		if [ -f "${_file}" ]; then
+			# Delete the webloc fileOut
+			echo -n 'Deleting: ';
+			rm -v "${_file}";
+		fi
 	fi
 done
 
