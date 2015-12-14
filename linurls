@@ -29,7 +29,7 @@ find . -name "*.webloc" | while read _file; do
 	dtName=`basename "${fileOut}" | sed 's/.webloc//'`;
 
 	# make sure the file(s) are XML, and get the url
-	plutil -convert xml1 "${_file}";
+	plutil -convert xml1 "${_file}" 2> /dev/null;
 	dtUrl=`cat "${_file}" | grep -i '<string>.*<\/string>' | sed 's/^.*<string>//;s/<\/string>$//'` 2> /dev/null;
 
 	# Having some old ones where they are in "/rsrc"... Try DeRez before dumping them to the log.
