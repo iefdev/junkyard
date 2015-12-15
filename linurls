@@ -53,7 +53,7 @@ URL=$dtUrl
 WEBLOC
 
 		# Only delete old webloc if the new has been created.
-		if [ -f "${_file}" ]; then
+		if [ -f "${dtFile}" ]; then
 			# Delete the webloc fileOut
 			echo -n 'Deleting: ';
 			rm -v "${_file}";
