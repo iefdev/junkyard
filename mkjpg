@@ -17,15 +17,27 @@
 _file=$(basename "$1");
 
 if [[ `uname` == 'Darwin' ]]; then
-	if [[ `type convert 2> /dev/null` ]]; then
+	# IMv7
+	if [[ `type magick 2> /dev/null` ]]; then
+		magick "$1" -background white -alpha remove -quality $_q "${1%.*}.jpg";
+		echo -e "$1\n  ${1%.*}.jpg";
+	# IMv6
+	elif [[ `type convert 2> /dev/null` ]]; then
 		convert "$1" -background white -alpha remove -quality $_q "${1%.*}.jpg";
 		echo -e "$1\n  ${1%.*}.jpg";
 	else
 		sips -s format jpeg -s formatOptions $_q "$1" --out "${1%.*}.jpg" 2> /dev/null;
 	fi
 else	
-	_msg="$(basename $0): Can't find 'convert'. Please install ImageMagick...";
-	[[ ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
-	convert "$1" -background white -alpha remove -quality $_q "${1%.*}.jpg";
-	echo -e "$1\n  ${1%.*}.jpg";
+	_msg="$FUNCNAME: Can't find 'magick' or 'convert'. Please install ImageMagick...";
+	[[ ! `type magick 2> /dev/null` && ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
+	# IMv7
+	if [[ `type magick 2> /dev/null` ]]; then
+		magick "$1" -background white -alpha remove -quality $_q "${1%.*}.jpg";
+		echo -e "$1\n  ${1%.*}.jpg";
+	# IMv6
+	elif [[ `type convert 2> /dev/null` ]]; then
+		convert "$1" -background white -alpha remove -quality $_q "${1%.*}.jpg";
+		echo -e "$1\n  ${1%.*}.jpg";
+	fi
 fi
