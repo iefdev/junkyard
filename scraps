@@ -2,410 +2,80 @@
 #
 # /usr/local/xbin/scraps
 #
-_version='1.2.0 (Jan 16, 2015)';    # January 16, 2015 7:23:40  GMT+01:00
-_copy='Copyright (C) 2014-2015 Eric F';
+# Description: A simple bash script to set/change settings for Screen Captures in OS X
 #
-# Description:	A simple bash script to set/change settings for Screen Captures in OS X
-#
-
-# Don't change...
-defFile="com.apple.screencapture";
-
-# Functions
-# ----------------------------------------------
-
-# Read settings
-function __defRead() {
-	defRead="defaults read $defFile";
-	$defRead >/dev/null 2>&1;
-	_test=$?;
-	if [ $_test == "1" ]; then
-			echo '[info] There are no settings to read from.';
-	else
-		$defRead;
-	fi
-}
-defRead=__defRead;
-
-
-# Folder
-function __location() {
-	defLoc="location";
-	defReadLoc=`defaults read $defFile $defLoc 2>/dev/null | wc -l | sed 's/^[ \t0]*/0/'`;
-	echo -e "\nFolder\n------------";
-
-	if [[ $defReadLoc != 0 ]]; then
-	echo -e "Your current folder/location is: `defaults read $defFile $defLoc`";
-	fi
-	echo -n "Enter a folder (path) for your screen caps: ";
-	read defLocation
-
-	if [[ $defLocation != '' ]]; then
-		echo -en "You entered: $defLocation\nIs that correct? [y/n]: ";
-		read jnLoc
-
-		if [[ $jnLoc == 'y' ]]; then
-			# Fix "~" to "$HOME"
-			if [[ $defLocation =~ [~] ]]; then
-				echo -e "Replacing \"~\" with \"$HOME\" ...";
-				defLocation=`echo $defLocation | sed "s/~//"`;
-				defLocation="$HOME$defLocation";
-			fi
-
-			if [ ! -d "$defLocation" ]; then
-				echo -e "\nCreating folder: $defLocation ...";
-				mkdir -p "$defLocation";
-			fi
-			echo -e "Setting prefs to: $defLoc: $defLocation";
-			defaults write $defFile $defLoc -string "$defLocation";
-		else
-			__location;
-		fi
-	fi
-}
-
-
-# Image type
-function __type() {
-	defType="type"
-	defReadType=`defaults read $defFile $defType 2>/dev/null | wc -l | sed 's/^[ \t0]*/0/'`;
-	echo -e "\nImage type\n------------"
-	if [[ $defReadType != 0 ]]; then
-		echo -e "Your current file type is: `defaults read $defFile $defType`";
-	fi
-	echo -n "Enter image type (png/jpg/gif etc) : ";
-	read defImageType
-
-	if [[ $defImageType != '' ]]; then
-		echo -en "You entered: $defImageType\nIs that correct? [y/n]: ";
-		read jnLoc
-
-		if [[ $jnLoc == 'y' ]]; then
-			echo -e "Setting prefs to: $defType: $defImageType";
-			defaults write $defFile $defType -string "$defImageType";
-		else
-			__type;
-		fi
-	fi
-}
-
-
-# Name/Prefix
-function __name() {
-	defName="name"
-	defReadName=`defaults read $defFile $defName 2>/dev/null | wc -l | sed 's/^[ \t0]*/0/'`;
-	echo -e "\nImage prefix\n------------"
-	if [[ $defReadName != 0 ]]; then
-		echo -e "Your current prefix is: `defaults read $defFile $defName`";
-	fi
-	echo -n "Enter name/prefix (avoid spec chars): ";
-	read defImageName
-
-	if [[ $defImageName != '' ]]; then
-		echo -en "You entered: $defImageName\nIs that correct? [y/n]: ";
-		read jnLoc
-
-		if [[ $jnLoc == 'y' ]]; then
-			echo -e "Setting prefs to: $defName: $defImageName";
-			defaults write $defFile $defName -string "$defImageName";
-		else
-			__name;
-		fi
-	fi
-}
-
-
-# Window shadow
-function __shadow() {
-	defShOff="disable-shadow";
-	defReadShOff=`defaults read $defFile $defShOff 2>/dev/null | wc -l | sed 's/^[ \t0]*/0/'`;
-	echo -e "\nWindow shadow\n------------";
-	if [[ $defReadShOff != 0 ]]; then
-		if [[ $defReadShOff == 0 ]]; then defReadShOff="on"; else defReadShOff="off"; fi
-		echo -e "Your current setting is: $defReadShOff";
-	fi
-	echo -n "Enter on or off for window shadows: ";
-	read defImageShadow;
-
-	if [[ $defImageShadow != '' ]]; then
-		echo -en "You entered: $defImageShadow\nIs that correct? [y/n]: ";
-		read jnLoc;
-
-		if [[ $jnLoc == 'y' ]]; then
-			if [[ $defImageShadow == 'on' ]]; then
-				defSetShOff='false';
-			elif [[ $defImageShadow == 'off' ]]; then
-				defSetShOff='true';
-			fi
-			echo -e "Setting prefs to: Shadows: $defImageShadow";
-			defaults write $defFile $defShOff -bool $defSetShOff;
-		else
-			__shadow;
-		fi
-	fi
-}
-
-
-# Help/Info
-__help() {
-	cat << HELP
-
-Usage:
------------
-  $_base                # going through all settings, 1-by-1
-
-  # Interactive
-  $_base -location
-  $_base -name
-  $_base -type
-  $_base -shadow
-
-  # Direct, if you now your settings:
-  # (examples)
-  $_base -l "/path/to/folder"
-  $_base -n "Prefix"
-  $_base -t png
-  $_base -s true
-
-  $_base -read              # reading the prefs
-  $_base -info              # showing version and quickhelp
-
-  $_base -h, --help         # showing the help (this info)
-  $_base -hl, --helpless    # showing the help (| less)
-
-------------------------------------------------
-
-Or use the 'defaults write' way in OS X (exemples):
-
-  defaults write com.apple.screencapture location -string "/path/to/folder"
-  defaults write com.apple.screencapture name -string Picture
-  defaults write com.apple.screencapture type -string png
-  defaults write com.apple.screencapture "disable-shadow" -bool true
-
-
-To make the settings change, run:
-
-  killall SystemUIServer
-
-
-Reading:
-
-  defaults read com.apple.screencapture          # read all settings
-  defaults read com.apple.screencapture type     # read image type
-
-HELP
-}
-
-
-# Restarting SystemUIserver
-__sysUI() {
-	echo "Restarting: systemUIserver ...";
-	sleep 1;
-	killall SystemUIServer;
-}
-
 
 # Oops
 function __err()
 {
-	[[ $_one != '-info' ]] && _optline=$(echo -e "\n * :» ${_red}$_base${_def}: No such option ($_one)");
-
 	cat << ERR
-/**$_optline
- * :» Usage (normal): $_base [-location][-type][-name][-shadow][-read]
- * :» QuickMode:      $_base [-l][-t][-n][-s] <value>
- * :» Help:           $_base [-h|-help|-hl|--helpless]
- * :» Version:        $_base [-V|--version]
- * :» Info:           $_base [-info]
+/**
+ * :» Usage: $_base -l, --location --shadow <value>
+ * :»        $_base -t, --type <value>
+ * :»        $_base -n, --name <value>
+ * :»        $_base -s, --shadow <value>
+ * :»
+ * :»        $_base -r, --read
+ * :»
+ * :»        $_base -fix-defaults
  */
 ERR
-	exit 1;
 }
-
 
 # Vars
 _base=$(basename $0);
-_one=$1;
-
-# Let's do this....
-if [[ $1 == '' ]]; then
-
-	cat << INTRO
-
-Preferences for screen captures
-------------------------------------------------
-
-This is what your current settings looks like:
-$defRead
+_prefs='com.apple.screencapture';
+_picf=~/Pictures/__scraps;
 
 
-To enter or change location (folder) for you images:
-you can DRAG AND DROP a folder into the terminal window, or TYPE the path MANUALLY.
+case $1 in
+	# Location
+	-l|--location)
+		defaults write $_prefs location -string $2;
+		killall SystemUIServer;
+		;;
 
-When you manually type in your folder, and it doesn't exists, it will try
-to create it at the given location.
+	# Name
+	-n|--name)
+		defaults write $_prefs name -string $2;
+		killall SystemUIServer;
+		;;
 
-(NOTE: If you not enter anything or just hit enter, we will move on to the next part.)
+	# Type (png|jpg|gif|tiff|bmp)
+	-t|--type)
+		defaults write $_prefs type -string $2;
+		killall SystemUIServer;
+		;;
 
-INTRO
+	# Shadow
+	-s|--shadow)
+		defaults write $_prefs disable-shadow -bool $2;
+		killall SystemUIServer;
+		;;
 
-	# Let's go...
-	__location;
+	# Read
+	-r|--read)
+		defaults read $_prefs;
+		;;
 
-	# Type
-	# Read more about image types here: http://www.question-defense.com/2012/03/27/list-of-mac-osx-lion-screencapture-format-types-photoshop-image-mode-for-each-mac-format
-	cat << TYPE
-------------------------------------------------
+	# New defaults
+	--fix-defaults)
+		[ ! -d $_picf ] && mkdir -p $_picf && ln -s $_picf $HOME/__scraps;
+		defaults write $_prefs location -string $_picf;
+		defaults write $_prefs name -string Picture;
+		defaults write $_prefs type -string png;
+		defaults write $_prefs disable-shadow -bool true;
+		killall SystemUIServer;
 
-Chose image type to use. [png|jpg|gif|tiff|bmp]
-(png is to prefer. It is a "lossless" format.)
-TYPE
+		sleep 2;
+		echo -e '\nPreferences:\n------------' && defaults read $_prefs;
+		echo -e '------------\n';
+		;;
 
-	# Let's go...
-	__type;
+	# Oops
+	*|-h|--help)
+		__err;
+		;;
+esac
 
-	# Prefix
-	cat << NAME
-------------------------------------------------
-
-You can set an image prefix. Default in OS X is: "Screen-shot".
-
-Avoid latin letters and special characters. They are not too good for
-uploads on the internet.
-NAME
-
-	# Let's go...
-	__name;
-
-	# Disable-shadow
-	cat << SHADOW
-------------------------------------------------
-
-Default in OS X is to include the window shadow when you
-capture a window (shift+cmd+4 and then space bar).
-SHADOW
-
-	# Let's go...
-	__shadow;
-
-	# Restarting SystemUIserver
-	__sysUI;
-
-
-	cat << FINISH
-That's all!
-
-------------------------------------------------
-
-You can also chose to run each setting seperately, just to chane one...
-FINISH
-
-	__help;
-
-	echo -n "To exit and go to your folder. Press y. (press enter just to exit) [y]? ";
-	read avsluta;
-
-	if [[ $avsluta == 'y' ]]; then
-		if [[ $defReadLoc != 0 ]] && [[ -d `defaults read $defFile $defLoc` ]]; then
-			echo -e "------------------------------------------------\nRevealing your folder in Finder ...";
-			sleep 3;
-			echo;
-			open -R `defaults read $defFile $defLoc`;
-		fi
-	fi
-
-# Each setting?
-else
-	case $1 in
-
-		# Folder
-		-location)
-			__location;
-			killall SystemUIServer;
-			if [[ -d `defaults read $defFile $defLoc` ]]; then
-				echo "Revealing your folder in Finder ...";
-				sleep 3
-				open -R `defaults read $defFile $defLoc`;
-			fi
-			;;
-
-		# Image prefix
-		-name)
-			__name;
-			# Restarting SystemUIserver
-			__sysUI;
-			;;
-
-		# Image type
-		-type)
-			__type;
-			# Restarting SystemUIserver
-			__sysUI;
-			;;
-
-		# Window shadow
-		-shadow)
-			__shadow;
-			# Restarting SystemUIserver
-			__sysUI;
-			;;
-
-		# Read current prefs
-		-read)
-			$defRead;
-			;;
-
-		# Help/info
-		-h|--help)
-			__help;
-			;;
-
-		# Help/info
-		-hl|--helpless)
-			__help | less;
-			;;
-
-		# Version/information
-		-V|--version)
-			echo "$_base: $_version";
-			;;
-
-		# Help
-		-info)
-			echo -e "$_base: $_version\n$_copy\n";
-			__err;
-			;;
-
-		### QuickMode ###
-		# Location
-		-l)
-			defaults write $defFile location -string $2 && __sysUI;
-			;;
-
-		# Name
-		-n)
-			defaults write $defFile name -string $2 && __sysUI;
-			;;
-
-		# Type
-		-t)
-			defaults write $defFile type -string $2 && __sysUI;
-			;;
-
-		# Shadow
-		-s)
-			defaults write $defFile disable-shadow -bool $2 && __sysUI;
-			;;
-		### QuickMode [end] ###
-
-		# Oops
-		*)
-			__err;
-			;;
-
-	esac
-
-fi
-
-# Bye-bye...
 exit;
