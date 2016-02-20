@@ -2,6 +2,10 @@
 #
 # /usr/local/xbin/scraps
 #
+# Author: Eric F
+# Copyright: 2016, Eric F
+# License: WTFPL, http://www.wtfpl.net/txt/copying/
+#
 # Description: A simple bash script to set/change settings for Screen Captures in OS X
 #
 
@@ -17,7 +21,7 @@ function __err()
  * :»
  * :»        $_base -r, --read
  * :»
- * :»        $_base -fix-defaults
+ * :»        $_base --fix-defaults
  */
 ERR
 }
