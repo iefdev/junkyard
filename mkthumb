@@ -16,30 +16,30 @@
 
 [[ $2 && $2 -lt 501 ]] && _px=$2 || _px=250;
 _file=$(basename "$1");
-_ext=$(echo $_file | sed -e "s/${_file%.*}//");
+_ext=$(echo "${_file##*.}");
 
 if [[ `uname` == 'Darwin' ]]; then
 	# IMv7
 	if [[ `type magick 2> /dev/null` ]]; then
-		magick "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px$_ext";
-		echo -e "$1\n  ${1%.*}_${_px}px$_ext";
+		magick "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px.${_ext}";
+		echo -e "$1\n  ${1%.*}_${_px}px.${_ext}";
 	# IMv6
 	elif [[ `type convert 2> /dev/null` ]]; then
-		convert "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px$_ext";
+		convert "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px.${_ext}";
 		echo -e "$1\n  ${1%.*}_${_px}px$_ext";
 	else
-		sips -Z ${_px} -s formatOptions best "$1" --out "${1%.*}_${_px}px$_ext" 2> /dev/null;
+		sips -Z ${_px} -s formatOptions best "$1" --out "${1%.*}_${_px}px$.${_ext}" 2> /dev/null;
 	fi
-else	
+else
 	_msg="$FUNCNAME: Can't find 'magick' or 'convert'. Please install ImageMagick...";
-	[[ ! `type magick 2> /dev/null` && ! `type convert 2> /dev/null` ]] && echo $_msg && return 1;
+	[[ ! `type magick 2> /dev/null` && ! `type convert 2> /dev/null` ]] && echo ${_msg} && return 1;
 	# IMv7
 	if [[ `type magick 2> /dev/null` ]]; then
-		magick "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px$_ext";
-		echo -e "$1\n  ${1%.*}_${_px}px$_ext";
+		magick "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px.${_ext}";
+		echo -e "$1\n  ${1%.*}_${_px}px.${_ext}";
 	# IMv6
 	elif [[ `type convert 2> /dev/null` ]]; then
-		convert "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px$_ext";
-		echo -e "$1\n  ${1%.*}_${_px}px$_ext";
+		convert "$1" -resize ${_px}x${_px} -quality 100 "${1%.*}_${_px}px.${_ext}";
+		echo -e "$1\n  ${1%.*}_${_px}px.${_ext}";
 	fi
 fi
