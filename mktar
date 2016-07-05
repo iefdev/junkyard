@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin/extract
+#
+
+# Check $1 for extension
+# xz = default, with fallback on gz if not installed
+# ------------------------------------------------------------
+[[ `type xz 2>/dev/null` ]] && _xz='xz' || _xz='gz'
+[[ ! -d $1 && ! -f $1 ]] && _ext=$1 && shift || _ext=${_xz};
+
+
+# Vars
+# ------------------------------------------------------------
+ERR=0;
+_base=$(basename $0);
+_path="$(dirname $1)";
+_dir="$(basename $1)";
+_excludes='--exclude ".DS_Store" --exclude "._*"';
+
+if [ -e $1 ]; then
+	cd ${_path};
+	case $_ext in 
+		gz)
+			tar -zcvf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
+			;;
+		bz2)
+			tar -jcvf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
+			;;
+		xz)
+			tar -cvf - "${_dir}" | xz -6e > "${_dir}".tar.${_ext};
+			;;
+		*)
+			echo "${_base}: Could not create '${_dir}.tar.${_ext}'";
+			cat  <<INFO
+Usage: ${_base} [gz|bz2|xz] <files/directory>
+       ${_base} foobar.d     # -> foobar.d.tar.xz";
+       ${_base} gz foobar.d  # -> foobar.d.tar.gz\n";
+
+INFO
+			ERR=1;
+			;;
+	esac
+else
+	echo "'${_dir}' is not a valid file/directory";
+	ERR=1;
+fi
+
+exit ${ERR};
+

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin/extract
+#
+
+# check input of $1
+# ------------------------------------------------------------
+if [ $# != 1 ] || [[ -z $1 ]]; then
+	echo -e "Usage:\n\t$(basename $0) <archive>";
+	echo -e "\t$(basename $0) foobar.tar.xz\n";
+	exit 1;
+fi
+
+# Vars
+# ------------------------------------------------------------
+ERR=0;
+
+_dir="$(dirname $1)";
+_file="$(basename $1)";
+_ext="${_file#*.}";
+
+if [ -f $1 ]; then
+	case $1 in
+		*.tar.bz2 | *.tbz2) tar -jxvf $1 -C ${_dir}; ;;
+		*.tar.xz) tar -xvf $1 -C ${_dir};            ;;
+		*.tar.gz | *.tgz) tar -zxvf $1 -C ${_dir};   ;;
+		*.bz2) bunzip2 -kf $1;                       ;;
+		*.rar) (cd ${_dir} && unrar x $1);           ;;
+		*.gz) gunzip -kvf $1;                        ;;
+		*.tar) tar -xf $1 -C ${_dir};                ;;
+		*.zip) unzip -f $1 -d ${_dir};               ;;
+		*.Z) (cd ${_dir} && uncompress $1);          ;;
+		*.7z) (cd ${_dir} && 7za x $1);              ;;
+		*)
+			echo "$(basename $0): '${_file}' cannot be extracted. '${_ext}' is not supported.";
+			ERR=1;
+			;;
+	esac
+else
+	echo "'${_file}' is not a valid file";
+	ERR=1;
+fi
+
+exit ${ERR};
+

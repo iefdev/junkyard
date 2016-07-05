@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin/2mp3
+#
+
+ERR=0;
+
+[[ ! `type ffmpeg 2> /dev/null` ]] && echo "$(basename $0): Please install 'ffmpeg'..." && ERR=1;
+
+for file in $@; do
+	ffmpeg -i "${file}" -ab 320k $(echo "${file%.*}.mp3" | sed 's/[[:space:]]/_/g');
+	ERR=$?;
+done
+
+exit ${ERR};
