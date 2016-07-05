@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# /usr/local/xbin/extract
+# /usr/local/xbin/mktar
 #
 
 # Check $1 for extension
@@ -20,7 +20,7 @@ _excludes='--exclude ".DS_Store" --exclude "._*"';
 
 if [ -e $1 ]; then
 	cd ${_path};
-	case $_ext in 
+	case $_ext in
 		gz)
 			tar -zcvf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
 			;;
