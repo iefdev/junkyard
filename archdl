@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#
+# Downloading Arch ISOFile(s)
+#
+#
+
+# Mirror (Umeå, Swe)
+_mirror='http://ftp.acc.umu.se';
+
+
+# Vars
+_dir=$(date '+%Y-%m-01');
+_iso="archlinux-"$(echo ${_dir//-/.})"-dual";
+
+
+# Make directory
+cd $(dirname $0);
+mkdir "${_dir}" && cd "${_dir}";
+
+
+# Download from mirror
+for f in iso.sig iso; do
+#	${_mirror}/mirror/archlinux/iso/YYYY.MM.01/archlinux-YYYY.MM.01-dual.iso
+#	${_mirror}/mirror/archlinux/iso/latest/archlinux-YYYY.MM.01-dual.iso
+	wget ${_mirror}/mirror/archlinux/iso/latest/"${_iso}.${f}";
+done
+
+
+# Get the SHA1sums as well
+wget ${_mirror}/mirror/archlinux/iso/latest/sha1sums.txt;
+
+
+# Verify the signature (sig file)
+if [[ `type gpg2 2>/dev/null` ]]; then
+	gpg2 --verify "${_iso}.iso.sig" "${_iso}.iso";
+else
+	echo "Couldn't find 'gpg2'. Please verify the signature.";
+fi
+
