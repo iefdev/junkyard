@@ -24,7 +24,7 @@ for file in "$@"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
     [[ ${file##*.} == 'mp3' ]] && echo "${_base}: \"${file}\" is already an mp3 file" && exit 1;
     ffmpeg -i "${file}" -ab ${kbps}k $(echo "${file%.*}.mp3" | sed 's/[[:space:]]/_/g');
-	ERR=$?;
+    ERR=$?;
 done
 
 exit ${ERR};
