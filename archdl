@@ -9,7 +9,12 @@ _mirror='http://ftp.acc.umu.se';
 
 
 # Vars
-_dir=$(date '+%Y-%m-01');
+# ------------------------------------------------------------
+
+# Incase the date isn't 01
+[ -z $1 ] && day=01 || day=$1;
+
+_dir=$(date "+%Y-%m-${day}");
 _iso="archlinux-"$(echo ${_dir//-/.})"-dual";
 
 
