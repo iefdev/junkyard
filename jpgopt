@@ -41,7 +41,7 @@ function jpegopt()
 
 # Loop $@
 for file in "$@"; do
-	[[ -f ${file} && ${file##*.} != 'jpg' ]] && echo "Running 'mkjpg;'" && mkjpg "${file}";
+	[[ -f ${file} && ${file##*.} != 'jpg' ]] && echo "Running 'mkjpg:'" && mkjpg "${file}";
 	if [[ -f ${file} ]]; then
 		jpegopt "${file%.*}.jpg";
 	else
