@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin/scraps
+#
+# Description: Script to toggle things, like hidden files, desktop icons..
+#
+
+ERR=0
+
+function toggleValue()
+{
+    local _item="$1";
+    STATUS=`defaults read com.apple.Finder ${_item}`
+    if [ $STATUS == 1 ]; then
+        defaults write com.apple.Finder ${_item} -bool false;
+    else
+        defaults write com.apple.Finder ${_item} -bool true;
+    fi
+    killall Finder;
+}
+
+case $1 in
+    hidden)
+        toggleValue "AppleShowAllFiles";
+        ERR=$?;
+        ;;
+    desktop)
+        toggleValue "CreateDesktop";
+        ERR=$?;
+        ;;
+    *)  echo -e "Usage: `basename $0` [hidden|desktop]\n";
+        ERR=1
+esac
+
+exit ${ERR};
