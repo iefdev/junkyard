@@ -44,9 +44,9 @@ fi
 # Encrypt
 if [[ -n ${_c} && -z ${_enc} ]]; then
     [ ${_c} == 'aes' ] && _c='aes256';
-    openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}"
+    openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}";
 
 # Decrypt
 else
-    openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}"
+    openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}";
 fi
