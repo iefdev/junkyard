@@ -7,8 +7,8 @@
 # ------------------------------------------------------------
 #
 # Usage:
-#   Encrypt: __e [bf|aes] <file> (default: bf)
-#   Decrypt: __e <file>
+#   Encrypt: encFile [bf|aes] <file> (default: bf)
+#   Decrypt: encFile <file>
 #
 
 if [[ $1 =~ ^bf$|^aes$ ]]; then
