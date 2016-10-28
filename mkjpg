@@ -10,34 +10,45 @@
 # On OS X, it uses 'convert' if installed with a fallback on 'sips' (bundled).
 #
 # Usage:
-# 	mkjpg file.png [<procent>]
+#   mkjpg file.png [<procent>]      Default is 100 (%)
+#   mkjpg -h                        Show help
 #
+
+ERR=0
+
+# Help
+[[ $1 == '-h' ]] && cat $0 | sed -n '12,14p' && exit 1;
+
 
 [[ $2 && $2 -lt 100 ]] && _q=$2 || _q=100;
 _file=$(basename "$1");
 
 if [[ `uname` == 'Darwin' ]]; then
-	# IMv7
-	if [[ `type magick 2> /dev/null` ]]; then
-		magick "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
-		echo -e "$1\n  ${1%.*}.jpg";
-	# IMv6
-	elif [[ `type convert 2> /dev/null` ]]; then
-		convert "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
-		echo -e "$1\n  ${1%.*}.jpg";
-	else
-		sips -s format jpeg -s formatOptions ${_q} "$1" --out "${1%.*}.jpg" 2> /dev/null;
-	fi
+    # IMv7
+    if [[ `type magick 2> /dev/null` ]]; then
+        magick "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
+        echo -e "$1\n  ${1%.*}.jpg";
+    # IMv6
+    elif [[ `type convert 2> /dev/null` ]]; then
+        convert "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
+        echo -e "$1\n  ${1%.*}.jpg";
+    else
+        sips -s format jpeg -s formatOptions ${_q} "$1" --out "${1%.*}.jpg" 2> /dev/null;
+    fi
+    ERR=$?
 else
-	_msg="$FUNCNAME: Can't find 'magick' or 'convert'. Please install ImageMagick...";
-	[[ ! `type magick 2> /dev/null` && ! `type convert 2> /dev/null` ]] && echo ${_msg} && return 1;
-	# IMv7
-	if [[ `type magick 2> /dev/null` ]]; then
-		magick "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
-		echo -e "$1\n  ${1%.*}.jpg";
-	# IMv6
-	elif [[ `type convert 2> /dev/null` ]]; then
-		convert "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
-		echo -e "$1\n  ${1%.*}.jpg";
-	fi
+    _msg="$FUNCNAME: Can't find 'magick' or 'convert'. Please install ImageMagick...";
+    [[ ! `type magick 2> /dev/null` && ! `type convert 2> /dev/null` ]] && echo ${_msg} && return 1;
+    # IMv7
+    if [[ `type magick 2> /dev/null` ]]; then
+        magick "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
+        echo -e "$1\n  ${1%.*}.jpg";
+    # IMv6
+    elif [[ `type convert 2> /dev/null` ]]; then
+        convert "$1" -background white -alpha remove -quality ${_q} "${1%.*}.jpg";
+        echo -e "$1\n  ${1%.*}.jpg";
+    fi
+    ERR=$?
 fi
+
+exit ${ERR};
