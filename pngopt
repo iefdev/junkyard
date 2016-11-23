@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #
-#
 # /usr/local/xbin/pngopt
 #
 # Description: A script to automate 'optipng' to optimize PNG
@@ -11,15 +10,20 @@
 # Usage:
 #	pngopt <file(s)>        1 or more files
 #	pngopt -h               Show help
+#	pngopt -v               Verbos, show filenames
 #
 
 ERR=0;
+V=0
+vb=''
 
 # Help
-[[ $# < 1 || $1 == '-h' ]] && cat $0 | sed -n '11,14p' && exit 1;
+[[ $# < 1 || $1 == '-h' ]] && cat $0 | sed -n '10,14p' && exit 1;
+
+# Verbose
+[[ $1 == '-v' ]] && V=1 && shift 1;
 
 # Check dependencies
-# ------------------------------------------------------------
 for dep in optipng; do
 	[[ ! `type ${dep} 2>/dev/null` ]] && echo -e ":: You must install '${dep}' to continue." && ERR=1;
 done
@@ -31,28 +35,30 @@ function isOptimized()
 	local img1="$1";
 	local img2="$2";
 
-    size1=$(ls -al ${img1} 2> /dev/null | awk '{ print $5;}')
-    size2=$(ls -al ${img2} 2> /dev/null | awk '{ print $5;}')
+    size1=$(ls -al "${img1}" 2> /dev/null | awk '{ print $5;}')
+    size2=$(ls -al "${img2}" 2> /dev/null | awk '{ print $5;}')
 
     if [ ${size2} -lt ${size1} ]; then
         procentage=$(echo "scale=2; (${size2} * 100 / ${size1}) - 100" | bc)
-        echo -en ":: Optimized! (${procentage//-/}%)\nRenaming: "
-        mv -v "${img2}" "${img2%.*}"
+        echo ":: Optimized! (${procentage//-/}%)"
+        [[ $V != 0 ]] && echo -en "Renaming: " && vb='-v ';
+        mv ${vb}"${img2}" "${img2%.*}";
     else
-        echo -n "Deleting: "
-        rm -v "${img2}"
+        echo ':: Keeping the original...'
+        [[ $V != 0 ]] && echo -n "Deleting: " && vb='-v ';
+        rm ${vb}"${img2}";
     fi
 }
 
 # Loop $@
 for file in "$@"; do
-	[[ -f ${file} && ${file##*.} != 'png' ]] && echo "It's not an png image. Skipping..."
+	[[ -f "${file}" && "${file##*.}" != 'png' ]] && echo "It's not an png image. Skipping..."
 
-	if [[ -f ${file} ]]; then
-        optipng -strip all -quiet -o7 "${file}" -out "${file}.opt"
-        isOptimized ${file}{,.opt}
+	if [[ -f "${file}" ]]; then
+        optipng -strip all -quiet -o7 "${file}" -out "${file}.opt";
+        isOptimized "${file}"{,.opt};
 	else
-		echo "'${file}' doesn't exist";
+		echo "$(basename $0): '${file}' doesn't exist";
 		ERR=1;
 	fi
 	echo;
