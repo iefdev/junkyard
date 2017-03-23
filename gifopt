@@ -8,8 +8,8 @@
 # ------------------------------------------------------------
 #
 # Usage:
-#	gifsicle [-v] [-c <int>] <file(s)>      1 or more files
-#	gifsicle -h                             Show help
+#	gifopt [-v] [-c <int>] <file(s)>        1 or more files
+#	gifopt -h                               Show help
 #
 
 ERR=0;
