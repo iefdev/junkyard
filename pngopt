@@ -43,7 +43,7 @@ function isOptimized()
         [[ $V != 0 ]] && echo -en "Renaming: " && vb='-v ';
         mv ${vb}"${img2}" "${img2%.*}";
     else
-        echo -n ":: Keeping the original...\n";
+        echo -e ":: Keeping the original...\n";
         [[ $V != 0 ]] && echo -n "Deleting: " && vb='-v ';
         rm ${vb}"${img2}";
     fi
