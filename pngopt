@@ -39,11 +39,11 @@ function isOptimized()
 
     if [ ${size2} -lt ${size1} ]; then
         procentage=$(echo "scale=2; (${size2} * 100 / ${size1}) - 100" | bc);
-        echo ":: Optimized! (${procentage//-/}%)";
+        echo -e ":: Optimized! (${procentage//-/}%)\n";
         [[ $V != 0 ]] && echo -en "Renaming: " && vb='-v ';
         mv ${vb}"${img2}" "${img2%.*}";
     else
-        echo ':: Keeping the original...';
+        echo -n ":: Keeping the original...\n";
         [[ $V != 0 ]] && echo -n "Deleting: " && vb='-v ';
         rm ${vb}"${img2}";
     fi
@@ -54,6 +54,8 @@ for file in "$@"; do
 	[[ -f "${file}" && "${file##*.}" != 'png' ]] && echo "It's not an png image. Skipping...";
 
 	if [[ -f "${file}" ]]; then
+        #echo "»» ${file}";
+        echo "»» $(basename "${file}")";
         optipng -strip all -quiet -o7 "${file}" -out "${file}.opt";
         isOptimized "${file}"{,.opt};
 	else
