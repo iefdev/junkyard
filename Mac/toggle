@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# /usr/local/xbin/scraps
+# /usr/local/xbin/toggle
 #
 # Description: Script to toggle things, like hidden files, desktop icons..
 #
