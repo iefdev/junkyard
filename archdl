@@ -32,8 +32,8 @@ done
 wget ${_mirror}/mirror/archlinux/iso/latest/sha1sums.txt;
 
 # Verify the signature (sig file)
-if [[ `type gpg2 2>/dev/null` ]]; then
+if [[ `type gpg 2>/dev/null` ]]; then
 	gpg2 --verify "${_iso}.iso.sig" "${_iso}.iso";
 else
-	echo "Couldn't find 'gpg2'. Please verify the signature.";
+	echo "Couldn't find 'gpg'. Please verify the signature.";
 fi
