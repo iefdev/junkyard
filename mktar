@@ -16,19 +16,19 @@ ERR=0;
 _base=$(basename $0);
 _path=$(dirname "$1");
 _dir=$(basename "$1");
-_excludes='--exclude ".DS_Store" --exclude "._*"';
+_excludes='--exclude .DS_Store --exclude ._*';
 
 if [ -e "$1" ]; then
     cd "${_path}";
     case $_ext in
         gz)
-            tar -zcvf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
+            tar -cvzf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
             ;;
         bz2)
-            tar -jcvf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
+            tar -cvjf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
             ;;
         xz)
-            tar -cvf - "${_dir}" | xz -6e > "${_dir}".tar.${_ext};
+            tar -cvf - ${_excludes} "${_dir}" | xz -6e > "${_dir}".tar.${_ext};
             ;;
         *)
             echo -e ":: ${_base}: Could not create '${_dir}.tar.${_ext}'\n";
