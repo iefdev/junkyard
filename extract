@@ -19,8 +19,8 @@ _dir=$(dirname "$1");
 _file=$(basename "$1");
 _ext="${_file#*.}";
 
-if [ -f $1 ]; then
-    case $1 in
+if [ -f "$1" ]; then
+    case "$1" in
         *.tar.bz2 | *.tbz2) tar -jxvf "$1" -C "${_dir}"; ;;
         *.tar.xz) tar -xvf "$1" -C "${_dir}";            ;;
         *.tar.gz | *.tgz) tar -zxvf "$1" -C "${_dir}";   ;;
