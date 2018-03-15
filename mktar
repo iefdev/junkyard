@@ -16,7 +16,7 @@ ERR=0;
 _base=$(basename $0);
 _path=$(dirname "$1");
 _dir=$(basename "$1");
-_excludes='--exclude .DS_Store --exclude ._*';
+_excludes=`echo --exclude={'.DS_Store','._*'}`;
 
 if [ -e "$1" ]; then
     cd "${_path}";
@@ -41,9 +41,9 @@ else
 fi
 
 [[ ${ERR} != 0 ]] && cat  <<INFO
-Usage: ${_base} [gz|bz2|xz] <files/directory>
-       ${_base} foobar.d     # -> foobar.d.tar.xz
-       ${_base} gz foobar.d  # -> foobar.d.tar.gz
+Usage: ${_base} [gz | bz2 | xz] [files | directories]
+       ${_base} foobar.d        # -> foobar.d.tar.xz
+       ${_base} gz foobar.d     # -> foobar.d.tar.gz
 
 INFO
 
