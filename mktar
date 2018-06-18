@@ -6,8 +6,9 @@
 # Check $1 for extension
 # xz = default, with fallback on gz if not installed
 # ------------------------------------------------------------
-[[ `type xz 2>/dev/null` ]] && _xz='xz' || _xz='gz'
-[[ ! -d $1 && ! -f $1 ]] && _ext=$1 && shift || _ext=${_xz};
+[[ `type xz 2>/dev/null` ]] && _xz='xz' || _xz='gz';
+[[ ${1} =~ ^xz$|^bz2$|^gz$ ]] && _ext=$1 && shift 1 || _ext=${_xz};
+[[ ! `type xz 2>/dev/null` && ${_ext} == 'xz' ]] && _ext='gz';
 
 
 # Vars
@@ -30,7 +31,7 @@ if [ -e "$1" ]; then
         xz)
             tar -cvf - ${_excludes} "${_dir}" | xz -6e > "${_dir}".tar.${_ext};
             ;;
-        *)
+        *|-h)
             echo -e ":: ${_base}: Could not create '${_dir}.tar.${_ext}'\n";
             ERR=1;
             ;;
@@ -41,9 +42,9 @@ else
 fi
 
 [[ ${ERR} != 0 ]] && cat  <<INFO
-Usage: ${_base} [gz | bz2 | xz] [files | directories]
-       ${_base} foobar.d        # -> foobar.d.tar.xz
-       ${_base} gz foobar.d     # -> foobar.d.tar.gz
+Usage: ${_base} [ gz | bz2 | xz ] [ file | directory ]
+       ${_base} foobar.d          # -> foobar.d.tar.xz
+       ${_base} gz foobar.d       # -> foobar.d.tar.gz
 
 INFO
 
