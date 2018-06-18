@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# Description: Script to sync your forks, incl branches and tags.
+#              // A modified version of: https://git.io/vh10n
+#
+# Usage: forkSync <upstream-remote> <target-remote>
+#        forkSync          # upstream origin (default values)
+#        forkSync foo bar  # foo bar
+#        forkSync foo      # foo origin
+#        forkSync '' bar   # upstream bar
+#
+
+# Help
+[[ $1 == '-h' ]] && cat $0 | sed -n '6,10p' && exit 1;
+
+# Vars
+_upstream=${1:-'upstream'};
+_origin=${2:-'origin'};
+
+# Sync
+echo ":: This will setup '${_origin}' to track all branches in '${_upstream}'." && exit;
+read -p ":: Are you sure? (Y/n) " -n 1 -r;
+
+if [[ ${REPLY} =~ ^[Yy]$ || ${REPLY} == '' ]]; then
+    echo && for _branch in `git branch -r | grep "${_upstream}" | grep -v master | grep -v HEAD | sed -e 's/.*\///g'`; do
+        git branch --track ${_branch} ${_upstream}/${_branch};
+    done
+fi
+
+# Push
+echo ":: This will push all local branches and tags into '${_origin}'";
+read -p ":: Are you sure? (Y/n) " -n 1 -r;
+[[ ${REPLY} =~ ^[Yy]$ || ${REPLY} == '' ]] && echo && git push --all ${_origin} && git push --tags ${_origin};
+
+exit;
