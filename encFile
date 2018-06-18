@@ -2,51 +2,48 @@
 #
 # /usr/local/xbin/encFile
 #
-# Description: Encrypt or Decrypt files w openssl
-#
-# ------------------------------------------------------------
-#
-# Usage:
-#   Encrypt: encFile [bf|aes] <file> (default: bf)
-#   Decrypt: encFile <file>
+# Description: Encrypt or Decrypt files with openssl
 #
 
-if [[ $1 =~ ^bf$|^aes$ ]]; then
-    _c=$1;
-    shift 1;
-fi
-
-# Vars
-_file="$1";
-_basename=$(basename $0);
-[ -z ${_c} ] && _c='bf';
-[[ ${_file##*.} == 'bf' ]] && _enc='bf';
-[[ ${_file##*.} == 'aes' ]] && _enc='aes256';
+ERR=0;
 
 # Usage
 function __err()
 {
     cat <<INFO
 Usage:
-  Encrypt: ${_basename} [bf|aes] <file> (default: bf)
-  Decrypt: ${_basename} <file>
+    Encrypt: $(basename $0) [ bf | aes ] <file>      # default: bf
+    Decrypt: $(basename $0) <file>
 
 INFO
 }
 
-if [[ $# < 1 ]]; then
-    __err && exit 1;
-elif [ -d "${_file}" ] || [ ! -f "${_file}" ]; then
+# Help
+[[ ${1} == '-h' || $# < 1 ]] && __err && exit 1;
+
+# bf or aes
+[[ ${1} =~ ^bf$|^aes$|^aes256$ ]] && _c="${1}" && shift 1 || _c='bf';
+
+# Vars
+_file="${1}";
+[[ ${_file##*.} == 'bf' ]] && _enc='bf';
+[[ ${_file##*.} == 'aes' ]] && _enc='aes256';
+
+# Check file
+if [[ -d "${_file}" || ! -f "${_file}" ]]; then
     echo -e "\"${_file}\" is not a valid or existing file.\n";
     __err && exit 1;
-fi
 
 # Encrypt
-if [[ -n ${_c} && -z ${_enc} ]]; then
+elif [[ -n ${_c} && -z ${_enc} ]]; then
     [ ${_c} == 'aes' ] && _c='aes256';
     openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}";
+    ERR=$?;
 
 # Decrypt
 else
     openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}";
+    ERR=$?;
 fi
+
+exit $ERR;
