@@ -23,7 +23,7 @@ done
 for file in "$@"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
     [[ ${file##*.} == 'm4a' ]] && echo "${_base}: \"${file}\" is already an m4a file" && exit 1;
-    ffmpeg -i "${file}" -c:a libfdk_aac -b:a ${kbps}k \
+    ffmpeg -i "${file}" -vn -c:a libfdk_aac -b:a ${kbps}k \
         -metadata title="$(echo $(basename "${file%.*}") | sed 's/_/ /g')" \
         $(echo "${file%.*}.m4a" | sed 's/[[:space:]]/_/g');
     ERR=$?;
