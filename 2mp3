@@ -2,13 +2,13 @@
 #
 # /usr/local/xbin/2mp3
 #
-# ffmpeg -i "<input>" -ab 320k "<ouput>"
+# ffmpeg -i "<input>" -b:a 320k -metadata title="<title>" "<ouput>"
 #
 
 ERR=0;
 _base=$(basename $0);
 
-[[ ! `type ffmpeg 2> /dev/null` ]] && echo "$(basename $0): Please install 'ffmpeg'..." && exit 1;
+[[ ! `type ffmpeg 2> /dev/null` ]] && echo "${_base}: Please install 'ffmpeg'..." && exit 1;
 
 while getopts ":q:" opt; do
     case $opt in
@@ -23,7 +23,9 @@ done
 for file in "$@"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
     [[ ${file##*.} == 'mp3' ]] && echo "${_base}: \"${file}\" is already an mp3 file" && exit 1;
-    ffmpeg -i "${file}" -ab ${kbps}k $(echo "${file%.*}.mp3" | sed 's/[[:space:]]/_/g');
+    ffmpeg -i "${file}" -b:a ${kbps}k \
+        -metadata title="$(echo $(basename "${file%.*}") | sed 's/_/ /g')" \
+        $(echo "${file%.*}.mp3" | sed 's/[[:space:]]/_/g');
     ERR=$?;
 done
 
