@@ -10,20 +10,41 @@ _base=$(basename $0);
 
 [[ ! `type ffmpeg 2> /dev/null` ]] && echo "${_base}: Please install 'ffmpeg'..." && exit 1;
 
-while getopts ":q:" opt; do
+while getopts ":c:q:h" opt; do
     case $opt in
-        q)  kbps=$OPTARG; shift $(($OPTIND-1)); ;;
-        *)  shift $(($OPTIND));                 ;;
+        c)  codec=${OPTARG}; ;;
+        q)  kbps=${OPTARG}; ;;
+        h)
+            cat << HELP
+Usage:      ${_base} [-c codec] [-q kbps] [-h] <files> ...
+
+Options:
+  -c CODEC  Codec can be one of: "aac", "libfdk_aac" (default) or "copy"
+  -q KBPS   Example: -c 128 (Default: 320)
+  -h        Show this help.
+
+HELP
+            ;;
+        *)
+            echo -e "${_base}: -${OPTARG}: Not a valid option.\n" >&2;
+            ${_base} -h;
+            exit 1;
+            ;;
     esac
 done
 
+shift "$((OPTIND-1))";
+
+# Default to libfdk_aac since it's the longest one to type/remember
+[[ ${codec} =~ ^copy$|^aac$|^libfdk_aac$ ]] || codec='libfdk_aac';
+
 # Make sure '-q' is an integer, or set to default (320)
-[[ ${kbps} =~ ^[0-9]+$ ]] || kbps='320'
+[[ ${kbps} =~ ^[0-9]+$ ]] || kbps='320';
 
 for file in "$@"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
     [[ ${file##*.} == 'm4a' ]] && echo "${_base}: \"${file}\" is already an m4a file" && exit 1;
-    ffmpeg -i "${file}" -vn -c:a libfdk_aac -b:a ${kbps}k \
+    ffmpeg -i "${file}" -vn -c:a ${codec} -b:a ${kbps}k \
         -metadata title="$(echo $(basename "${file%.*}") | sed 's/_/ /g')" \
         $(echo "${file%.*}.m4a" | sed 's/[[:space:]]/_/g');
     ERR=$?;
