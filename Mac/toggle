@@ -10,12 +10,9 @@ ERR=0
 function toggleValue()
 {
     local _item="$1";
-    STATUS=`defaults read com.apple.Finder ${_item}`
-    if [ $STATUS == 1 ]; then
-        defaults write com.apple.Finder ${_item} -bool false;
-    else
-        defaults write com.apple.Finder ${_item} -bool true;
-    fi
+    STATUS=$(defaults read com.apple.Finder ${_item});
+    [ $STATUS == 1 ] && _bool=false || _bool=true;
+    defaults write com.apple.Finder ${_item} -bool ${_bool};
     killall Finder;
 }
 
@@ -28,7 +25,7 @@ case $1 in
         toggleValue "CreateDesktop";
         ERR=$?;
         ;;
-    *)  echo -e "Usage: `basename $0` [hidden|desktop]\n";
+    *)  echo -e "Usage: $(basename $0) [ hidden | desktop ]\n";
         ERR=1
 esac
 

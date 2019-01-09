@@ -6,44 +6,63 @@
 #
 
 ERR=0;
+_base=$(basename $0);
 
-# Usage
-function __err()
-{
-    cat <<INFO
-Usage:
-    Encrypt: $(basename $0) [ bf | aes ] <file>      # default: bf
-    Decrypt: $(basename $0) <file>
+[[ ! `type openssl 2> /dev/null` ]] && echo "${_base}: Please install 'openssl'..." && exit 1;
 
-INFO
-}
+while getopts ":c:q:h" opt; do
+    case $opt in
+        c)  _c=${OPTARG}; ;;
+        h)
+            cat << HELP
+Usage:      ${_base} [ -c cipher ] [ -h ] <file>
 
-# Help
-[[ ${1} == '-h' || $# < 1 ]] && __err && exit 1;
+Options:
+  -c CIPHER Cipher can be one of: "aes" (aes256), or "bf" (default).
+  -h        Show this help.
+
+HELP
+            ;;
+        *)
+            echo -e "${_base}: -${OPTARG}: Not a valid option.\n" >&2;
+            ${_base} -h;
+            exit 1;
+            ;;
+    esac
+done
+
+shift "$((OPTIND-1))";
 
 # bf or aes
-[[ ${1} =~ ^bf$|^aes$|^aes256$ ]] && _c="${1}" && shift 1 || _c='bf';
+[[ ${_c} =~ ^bf$|^aes$|^aes256$ ]] && _c="${_c}" || _c='bf';
+[[ ${_c} =~ ^aes$ ]] && _c='aes256';
 
-# Vars
+# Set _enc
 _file="${1}";
 [[ ${_file##*.} == 'bf' ]] && _enc='bf';
 [[ ${_file##*.} == 'aes' ]] && _enc='aes256';
 
-# Check file
-if [[ -d "${_file}" || ! -f "${_file}" ]]; then
-    echo -e "\"${_file}\" is not a valid or existing file.\n";
-    __err && exit 1;
+if [[ $# == 1 ]]; then
+    # Check file
+    if [[ -d "${_file}" || ! -f "${_file}" ]]; then
+        echo -e "${_base}: \"${_file}\" is not a valid or existing file.\n";
+        ${_base} -h && exit 1;
 
-# Encrypt
-elif [[ -n ${_c} && -z ${_enc} ]]; then
-    [ ${_c} == 'aes' ] && _c='aes256';
-    openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}";
-    ERR=$?;
+    # Encrypt
+    elif [[ -n ${_c} && -z ${_enc} ]]; then
+        echo -e ':: Encrypting...';
+        openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}";
+        ERR=$?;
 
-# Decrypt
-else
-    openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}";
-    ERR=$?;
+    # Decrypt
+    else
+        echo -e ':: Decrypting...';
+        openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}";
+        ERR=$?;
+    fi
+
+    # Remove ${_file}
+    [[ ${ERR} == 0 ]] && echo "Removing: $(rm -v "${_file}")";
 fi
 
-exit $ERR;
+exit ${ERR};
