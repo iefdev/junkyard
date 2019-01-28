@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# /usr/local/xbin/libcurl-toggle
+#
+#
+# Description: Script to toggle /usr/lib/libcurl.4.dylib
+#              between to orig (apple) and a newer (macports)
+#
+
+
+# Run as root
+[[ $EUID -ne 0 ]] && echo -e "$(basename $0): This script must be run as root\n" 1>&2 && exit 1;
+
+# Vars
+ERR=0;
+_file='/usr/lib/libcurl.4.dylib';
+
+# Show status
+[[ ${1} == '-s' ]] && echo ":: Status: $([ -h ${_file} ] && echo 'symlink' || echo 'orig')" && exit ${ERR};
+
+if [ -h ${_file} ]; then
+    mv ${_file}{.orig,};
+    echo ":: Moving back to the original file...";
+    ERR=$?;
+else
+    # make sure to keep a bak of the original
+    [ -f ${_file}.orig.bak ] || cp ${_file}{,.orig.bak};
+    mv ${_file}{,.orig};
+    ln -s /opt/local/lib/libcurl.4.dylib ${_file};
+    echo ":: Using the symlink...";
+    ERR=$?;
+fi
+
+ls -AhlG ${_file};
+
+exit ${ERR};
