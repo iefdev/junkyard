@@ -2,7 +2,7 @@
 #
 # /usr/local/xbin/2aac
 #
-# ffmpeg -i "<input>" -c:a libfdk_aac -b:a 320k  -metadata title="<title>" "<output>"
+# ffmpeg -i "<input>" -vn -c:a libfdk_aac -b:a 320k  -metadata title="<title>" "<output>"
 #
 
 ERR=0;
