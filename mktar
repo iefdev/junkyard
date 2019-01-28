@@ -2,17 +2,31 @@
 #
 # /usr/local/xbin/mktar
 #
+#
+# Description: A simple script to make compressed archives.
+#              It defaults to xz with a fallback on gz
+#              if it’s not installed.
+#
+# Usage: mktar [gz | bz2 | xz] [file | directory]
+#        mktar foobar.d          # -> foobar.d.tar.xz
+#        mktar gz foobar.d       # -> foobar.d.tar.gz
+#
+
+# Help
+[[ $# < 1 || $1 == '-h' ]] && cat $0 | sed -n '10,12p' && exit 1;
 
 # Check $1 for extension
 # xz = default, with fallback on gz if not installed
-# ------------------------------------------------------------
 [[ `type xz 2>/dev/null` ]] && _xz='xz' || _xz='gz';
 [[ ${1} =~ ^xz$|^bz2$|^gz$ ]] && _ext=$1 && shift 1 || _ext=${_xz};
 [[ ! `type xz 2>/dev/null` && ${_ext} == 'xz' ]] && _ext='gz';
 
+# Normally in your .bashrc | .bash_profile
+# adding them here, incas they're not.
+export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
+export COPYFILE_DISABLE=true
 
 # Vars
-# ------------------------------------------------------------
 ERR=0;
 _base=$(basename $0);
 _path=$(dirname "$1");
@@ -40,12 +54,5 @@ else
     echo -e ":: '${_dir}' is not a valid file/directory\n";
     ERR=1;
 fi
-
-[[ ${ERR} != 0 ]] && cat  <<INFO
-Usage: ${_base} [ gz | bz2 | xz ] [ file | directory ]
-       ${_base} foobar.d          # -> foobar.d.tar.xz
-       ${_base} gz foobar.d       # -> foobar.d.tar.gz
-
-INFO
 
 exit ${ERR};
