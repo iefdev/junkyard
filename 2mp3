@@ -10,15 +10,31 @@ _base=$(basename $0);
 
 [[ ! `type ffmpeg 2> /dev/null` ]] && echo "${_base}: Please install 'ffmpeg'..." && exit 1;
 
-while getopts ":q:" opt; do
+while getopts ":b:h" opt; do
     case $opt in
-        q)  kbps=$OPTARG; shift $(($OPTIND-1)); ;;
-        *)  shift $(($OPTIND));                 ;;
+        b)  kbps=${OPTARG}; ;;
+        h)
+            cat << HELP
+Usage:      ${_base} [-h] [-b kbps] <files> ...
+
+Options:
+  -b KBPS   Bitrate. Example: -b 128 (Default: 320)
+  -h        Show this help.
+
+HELP
+            exit;
+            ;;
+        *)
+            echo -e "${_base}: -${OPTARG}: Not a valid option.\n" >&2;
+            ${_base} -h && exit 1;
+            ;;
     esac
 done
 
+shift "$((OPTIND -1))";
+
 # Make sure '-q' is an integer, or set to default (320)
-[[ ${kbps} =~ ^[0-9]+$ ]] || kbps='320'
+[[ ${kbps} =~ ^[0-9]+$ ]] || kbps='320';
 
 for file in "$@"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
