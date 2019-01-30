@@ -10,12 +10,12 @@ _base=$(basename $0);
 
 [[ ! `type openssl 2> /dev/null` ]] && echo "${_base}: Please install 'openssl'..." && exit 1;
 
-while getopts ":c:q:h" opt; do
+while getopts ":c:h" opt; do
     case $opt in
         c)  _c=${OPTARG}; ;;
         h)
             cat << HELP
-Usage:      ${_base} [ -c cipher ] [ -h ] <file>
+Usage:      ${_base} [-h] [-c cipher] <file>
 
 Options:
   -c CIPHER Cipher can be one of: "aes" (aes256), or "bf" (default).
@@ -31,7 +31,7 @@ HELP
     esac
 done
 
-shift "$((OPTIND-1))";
+shift "$((OPTIND -1))";
 
 # bf or aes
 [[ ${_c} =~ ^bf$|^aes$|^aes256$ ]] && _c="${_c}" || _c='bf';
