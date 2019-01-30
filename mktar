@@ -3,28 +3,23 @@
 # /usr/local/xbin/mktar
 #
 #
-# Description: A simple script to make compressed archives.
-#              It defaults to xz with a fallback on gz
-#              if it’s not installed.
+# Description: A simple script to make compressed archives. It defaults
+#              to xz with a fallback on gz if it’s not installed.
 #
 # Usage: mktar [gz | bz2 | xz] [file | directory]
 #        mktar foobar.d          # -> foobar.d.tar.xz
 #        mktar gz foobar.d       # -> foobar.d.tar.gz
 #
 
+# OS X / macOS env's (10.4, 10.5+)
+# incase they're not set already
+if [[ $(uname -s) == 'Darwin' ]]; then
+    export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
+    export COPYFILE_DISABLE=true
+fi
+
 # Help
 [[ $# < 1 || $1 == '-h' ]] && cat $0 | sed -n '10,12p' && exit 1;
-
-# Check $1 for extension
-# xz = default, with fallback on gz if not installed
-[[ `type xz 2>/dev/null` ]] && _xz='xz' || _xz='gz';
-[[ ${1} =~ ^xz$|^bz2$|^gz$ ]] && _ext=$1 && shift 1 || _ext=${_xz};
-[[ ! `type xz 2>/dev/null` && ${_ext} == 'xz' ]] && _ext='gz';
-
-# Normally in your .bashrc | .bash_profile
-# adding them here, incas they're not.
-export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
-export COPYFILE_DISABLE=true
 
 # Vars
 ERR=0;
@@ -33,19 +28,17 @@ _path=$(dirname "$1");
 _dir=$(basename "$1");
 _excludes=`echo --exclude={'.DS_Store','._*'}`;
 
+# Check $1 for extension: xz = default | gz if not installed
+[[ `type xsz 2> /dev/null` ]] && _xz='xz' || _xz='gz';
+[[ ${1} =~ ^xz$|^bz2$|^gz$ ]] && _ext=$1 && shift 1 || _ext=${_xz};
+
 if [ -e "$1" ]; then
     cd "${_path}";
     case $_ext in
-        gz)
-            tar -cvzf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
-            ;;
-        bz2)
-            tar -cvjf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";
-            ;;
-        xz)
-            tar -cvf - ${_excludes} "${_dir}" | xz -6e > "${_dir}".tar.${_ext};
-            ;;
-        *|-h)
+        gz)     tar -cvzf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";             ;;
+        bz2)    tar -cvjf "${_dir}".tar.${_ext} ${_excludes} "${_dir}";             ;;
+        xz)     tar -cvf - ${_excludes} "${_dir}" | xz -6e > "${_dir}".tar.${_ext}; ;;
+        *)
             echo -e ":: ${_base}: Could not create '${_dir}.tar.${_ext}'\n";
             ERR=1;
             ;;
