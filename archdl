@@ -9,22 +9,14 @@ _mirror='https://ftp.acc.umu.se';
 
 
 # Vars
-# ------------------------------------------------------------
-
-# Incase the date isn't 01
-[ -z $1 ] && day=01 || day=$1;
-
-_dir=$(date "+%Y-%m-${day}");
+_dir=$(date "+%Y-%m-${1:-01}");
 _iso='archlinux-'$(echo ${_dir//-/.})'-x86_64';
 
 # Make directory
-#cd $(dirname $0);
 mkdir -pv "${_dir}" && cd "${_dir}";
 
 # Download from mirror
 for f in iso.sig iso; do
-#	${_mirror}/mirror/archlinux/iso/YYYY.MM.01/archlinux-YYYY.MM.01-x86_64.iso
-#	${_mirror}/mirror/archlinux/iso/latest/archlinux-YYYY.MM.01-x86_64.iso
 	wget ${_mirror}/mirror/archlinux/iso/latest/"${_iso}.${f}";
 done
 
