@@ -13,7 +13,7 @@
 #
 
 # Help
-[[ $# < 1 || $1 == '-h' ]] && cat $0 | sed -n '8,12p' && exit 1;
+[[ $# < 1 || $1 == '-h' ]] && sed -n '8,12p' ${0} && exit 1;
 
 # Vars
 ERR=0;
@@ -25,15 +25,13 @@ for f in "$@"; do
 
     if [ -f "${f}" ]; then
         case "${f}" in
-            *.tar.xz) tar -Jxvf "${f}" -C "${_dir}";            ;;
-            *.tar.bz2 | *.tbz2) tar -jxvf "${f}" -C "${_dir}";  ;;
-            *.tar.gz | *.tgz) tar -zxvf "${f}" -C "${_dir}";    ;;
-            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";          ;;
-            *.bz2) bzip2 -dfkv "${f}";                          ;;
-            *.gz) gzip -dfkv "${f}";                            ;;
-            *.rar) (cd "${_dir}" && unrar x "${f}");            ;;
-            *.Z) (cd "${_dir}" && uncompress "${f}");           ;;
-            *.7z) (cd "${_dir}" && 7z x "${f}");                ;;
+            *.tar.xz) tar -Jxvf "${f}" -C "${_dir}";                    ;;
+            *.tar.bz2 | *.bz2 | *.tbz2) tar -jxvf "${f}" -C "${_dir}";  ;;
+            *.tar.gz | *.gz | *.tgz) tar -zxvf "${f}" -C "${_dir}";     ;;
+            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";                  ;;
+            *.rar) (cd "${_dir}" && unrar x "${f}");                    ;;
+            *.Z) (cd "${_dir}" && uncompress "${f}");                   ;;
+            *.7z) (cd "${_dir}" && 7z x "${f}");                        ;;
             *)
                 echo "$(basename $0): '${_file}' cannot be extracted. '${_ext}' is not supported.";
                 ERR=1;
