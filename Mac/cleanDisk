@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+#
+# /usr/local/xbin/cleanDisk
+#
+# Descritption:
+#     Script to clean up external disks on OS X/macOS
+#     from misc resource files/folders: .DS_Store, ._, etc.
+#
+# Usage:
+#     cleanDisk NameOfUSBDisk
+#     cleanDisk Name\ Of\ USB\ Disk
+#     cleanDisk "Name Of USB Disk"
+#
+
+[[ $# < 1 || $1 == '-h' ]] && sed -n '9,14p' ${0} && exit 1;
+
+# Just the name of the disk
+_disk_name=`basename "${1}"`;
+
+if [ ! -d /Volumes/"${_disk_name}" ]; then
+    echo ":: $(basename $0): '/Volumes/${_disk_name}' doesn't exist";
+    echo ':: Aborting...';
+    exit 1;
+fi
+
+cd "/Volumes/${_disk_name}";
+
+# .DS_Store, ._file, ._file2, etc
+echo -e '\n:: Deleting all .DS_Store:';
+find . -type f -name ".DS_Store" -exec rm -v {} \;;
+echo ':: Deleting all ._\*:';
+find . -type f -name "._*"  -exec rm -v {} \;;
+
+# Removing xtra folders and OS X/macOS stuff, if they exist.
+echo -e '\nSearching -> deleting the folders: .fseventsd, .Spotlight-V100, .TemporaryItems and .Trashes';
+for _dir in '.fseventsd' '.Spotlight-V100' '.TemporaryItems' '.Trashes'; do
+    echo -e "\n:: Deleting folder: ${_dir}";
+	[ -d ./${_dir} ] && rm -rfv ./${_dir};
+done
+
+echo -e '\nDone!\n';
+exit;
