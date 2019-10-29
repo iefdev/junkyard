@@ -10,4 +10,4 @@ _General information in locations/paths, installation are on the [Wiki Home][wik
 
 
 <!-- Markdown refs -->
-[wiki]: https://github.com/iEFdev/junkyard/wiki "Wiki"
+[wiki]: https://gitlab.com/iEFdev/junkyard/wikis "Wiki"
