@@ -11,7 +11,7 @@
 #
 
 # Help
-[[ $1 == '-h' ]] && sed -n '6,10p' ${0} && exit 1;
+[[ $# < 1 || $1 == '-h' ]] && sed -n '6,10p' ${0} && exit 1;
 
 # Vars
 _upstream=${1:-'upstream'};
