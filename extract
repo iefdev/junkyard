@@ -5,11 +5,11 @@
 #
 # Decription: Script to extract misc archives
 #
-# Usage:
-#     extract <archive> ...
-#     extract fooBar.tar.xz
-#     extract fooBar.tar.xz barBaz.tar.xz
-#     extract ./**/*.tar.xz
+# extract: 2020-01-12
+# Usage: extract <archive> ...
+#        extract fooBar.tar.xz
+#        extract fooBar.tar.xz barBaz.tar.xz
+#        extract ./**/*.tar.xz
 #
 
 # Help
@@ -25,13 +25,14 @@ for f in "$@"; do
 
     if [ -f "${f}" ]; then
         case "${f}" in
-            *.tar.xz) tar -Jxvf "${f}" -C "${_dir}";                    ;;
-            *.tar.bz2 | *.bz2 | *.tbz2) tar -jxvf "${f}" -C "${_dir}";  ;;
-            *.tar.gz | *.gz | *.tgz) tar -zxvf "${f}" -C "${_dir}";     ;;
-            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";                  ;;
-            *.rar) (cd "${_dir}" && unrar x "${f}");                    ;;
-            *.Z) (cd "${_dir}" && uncompress "${f}");                   ;;
-            *.7z) (cd "${_dir}" && 7z x "${f}");                        ;;
+            *.tar.xz|*.txz) tar -Jxvf "${f}" -C "${_dir}";          ;;
+            *.tar.zst|*.tzst) tar --zstd -xvf "${f}" -C "${_dir}";  ;;
+            *.tar.bz2|*.bz2|*.tbz2) tar -jxvf "${f}" -C "${_dir}";  ;;
+            *.tar.gz|*.gz|*.tgz) tar -zxvf "${f}" -C "${_dir}";     ;;
+            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";              ;;
+            *.rar) (cd "${_dir}" && unrar x "${f}");                ;;
+            *.Z) (cd "${_dir}" && uncompress "${f}");               ;;
+            *.7z) (cd "${_dir}" && 7z x "${f}");                    ;;
             *)
                 echo "$(basename $0): '${_file}' cannot be extracted. '${_ext}' is not supported.";
                 ERR=1;
