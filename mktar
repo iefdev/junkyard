@@ -6,7 +6,8 @@
 # Description: A simple script to make compressed archives. It defaults
 #              to xz with a fallback on gz if it’s not installed.
 #
-# Usage: mktar [gz | bz2 | xz] [file | directory]
+# mktar: 2020-01-12
+# Usage: mktar [gz|bz2|zst|xz] [file | directory]
 #        mktar foobar.d          # -> foobar.d.tar.xz
 #        mktar gz foobar.d       # -> foobar.d.tar.gz
 #
@@ -18,25 +19,30 @@ if [[ $(uname -s) == 'Darwin' ]]; then
 fi
 
 # Help
-[[ $# < 1 || ${1} == '-h' ]] && sed -n '10,12p' ${0} && exit 1;
+[[ $# < 1 || ${1} == '-h' ]] && sed -n '9,12p' ${0} && exit 1;
 
 # Vars
 ERR=0;
+
+# Check $1 for extension: xz = default | gz if not installed
+[[ `type xz 2> /dev/null` ]] && _xz='xz' || _xz='gz';
+[[ ${1} =~ ^xz$|^zst$|^bz2$|^gz$ ]] && _ext=${1} && shift 1 || _ext=${_xz};
+
 _base=$(basename $0);
 _path=$(dirname "$1");
 _dir=$(basename "$1");
 _excl=`echo --exclude={'.DS_Store','._*'}`;
 
-# Check $1 for extension: xz = default | gz if not installed
-[[ `type xz 2> /dev/null` ]] && _xz='xz' || _xz='gz';
-[[ ${1} =~ ^xz$|^bz2$|^gz$ ]] && _ext=${1} && shift 1 || _ext=${_xz};
-
 if [ -e "${1}" ]; then
     cd "${_path}";
+
     case ${_ext} in
-        gz)     tar -cvzf "${_dir}".tar.${_ext} ${_excl} "${_dir}";             ;;
-        bz2)    tar -cvjf "${_dir}".tar.${_ext} ${_excl} "${_dir}";             ;;
-        xz)     tar -cvf - ${_excl} "${_dir}" | xz -6e > "${_dir}".tar.${_ext}; ;;
+        gz)     tar -cvzf "${_dir}".tar.${_ext} ${_excl} "${_dir}"; ;;
+        bz2)    tar -cvjf "${_dir}".tar.${_ext} ${_excl} "${_dir}"; ;;
+        zst)    tar -cvf - ${_ecxl} "${_dir}" \
+                | zstd -T2 --ultra -22 > "${_dir}".tar.${_ext};     ;;
+        xz)     tar -cvf - ${_excl} "${_dir}" \
+                | xz -6e > "${_dir}".tar.${_ext};                   ;;
         *)
             echo -e ":: ${_base}: Could not create '${_dir}.tar.${_ext}'\n";
             ERR=1;
