@@ -5,13 +5,19 @@
 # Description: Encrypt or Decrypt files with openssl
 #
 
-ERR=0;
-_base=$(basename $0);
+# Since openssl 1.1.1b
+# *** WARNING : deprecated key derivation used.
+# Using -iter or -pbkdf2 would be better.
+#
+# Supress it, for now (2> /dev/null)
 
-[[ ! `type openssl 2> /dev/null` ]] && echo "${_base}: Please install 'openssl'..." && exit 1;
+ERR=0;
+_base=$(basename ${0});
+
+[[ ! `type openssl 2> /dev/null` ]] && echo "${_base}: Please install: openssl" && exit 1;
 
 while getopts ":c:h" opt; do
-    case $opt in
+    case ${opt} in
         c)  _c=${OPTARG}; ;;
         h)
             cat << HELP
@@ -42,7 +48,7 @@ _file="${1}";
 [[ ${_file##*.} == 'bf' ]] && _enc='bf';
 [[ ${_file##*.} == 'aes' ]] && _enc='aes256';
 
-if [[ $# == 1 ]]; then
+if [[ ${#} == 1 ]]; then
     # Check file
     if [[ -d "${_file}" || ! -f "${_file}" ]]; then
         echo -e "${_base}: \"${_file}\" is not a valid or existing file.\n";
@@ -50,19 +56,19 @@ if [[ $# == 1 ]]; then
 
     # Encrypt
     elif [[ -n ${_c} && -z ${_enc} ]]; then
-        echo -e ':: Encrypting...';
-        openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}";
-        ERR=$?;
+        echo ":: Encrypting: ${_file}";
+        openssl enc -${_c} -A -in "${_file}" > "${_file}.${_c//256/}" 2> /dev/null;
+        ERR=${?};
 
     # Decrypt
     else
-        echo -e ':: Decrypting...';
-        openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}";
-        ERR=$?;
+        echo -e ":: Decrypting: ${_file}";
+        openssl enc -${_enc} -A -d -in "${_file}" > "${_file%.*}" 2> /dev/null;
+        ERR=${?};
     fi
 
     # Remove ${_file}
-    [[ ${ERR} == 0 ]] && echo "Removing: $(rm -v "${_file}")";
+    [[ ${ERR} == 0 ]] && echo ":: Removing: $(rm -v "${_file}")";
 fi
 
 exit ${ERR};
