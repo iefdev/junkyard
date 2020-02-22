@@ -5,7 +5,7 @@
 #
 # Decription: Script to extract misc archives
 #
-# extract: 2020-01-12
+# extract: 2020-02-22
 # Usage: extract <archive> ...
 #        extract fooBar.tar.xz
 #        extract fooBar.tar.xz barBaz.tar.xz
@@ -13,7 +13,7 @@
 #
 
 # Help
-[[ $# < 1 || $1 == '-h' ]] && sed -n '8,12p' ${0} && exit 1;
+[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '8,12p' ${0} && exit 1;
 
 # Vars
 ERR=0;

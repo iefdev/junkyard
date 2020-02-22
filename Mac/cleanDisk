@@ -13,13 +13,13 @@
 #     cleanDisk "Name Of USB Disk"
 #
 
-[[ $# < 1 || $1 == '-h' ]] && sed -n '9,14p' ${0} && exit 1;
+[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '9,14p' ${0} && exit 1;
 
 # Just the name of the disk
 _disk_name=`basename "${1}"`;
 
 if [ ! -d /Volumes/"${_disk_name}" ]; then
-    echo ":: $(basename $0): '/Volumes/${_disk_name}' doesn't exist";
+    echo ":: $(basename ${0}): '/Volumes/${_disk_name}' doesn't exist";
     echo ':: Aborting...';
     exit 1;
 fi

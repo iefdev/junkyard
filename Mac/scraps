@@ -14,66 +14,66 @@ function __err()
 {
 	cat << ERR
 /**
- * :» Usage: $_base -l, --location <value>
- * :»        $_base -t, --type <value>
- * :»        $_base -n, --name <value>
- * :»        $_base -s, --shadow <value>
+ * :» Usage: ${_base} -l, --location <value>
+ * :»        ${_base} -t, --type <value>
+ * :»        ${_base} -n, --name <value>
+ * :»        ${_base} -s, --shadow <value>
  * :»
- * :»        $_base --fix-defaults
+ * :»        ${_base} --fix-defaults
  * :»
- * :»        $_base -r, --read
- * :»        $_base -h, --help
+ * :»        ${_base} -r, --read
+ * :»        ${_base} -h, --help
  */
 ERR
 }
 
 # Vars
-_base=$(basename $0);
+_base=$(basename ${0});
 _prefs='com.apple.screencapture';
 _picf=~/Pictures/__scraps;
 
 
-case $1 in
+case ${1} in
 	# Location
 	-l|--location)
-		defaults write $_prefs location -string $2;
+		defaults write ${_prefs} location -string ${2};
 		killall SystemUIServer;
 		;;
 
 	# Name
 	-n|--name)
-		defaults write $_prefs name -string $2;
+		defaults write ${_prefs} name -string ${2};
 		killall SystemUIServer;
 		;;
 
 	# Type (png|jpg|gif|tiff|bmp)
 	-t|--type)
-		defaults write $_prefs type -string $2;
+		defaults write ${_prefs} type -string ${2};
 		killall SystemUIServer;
 		;;
 
 	# Shadow
 	-s|--shadow)
-		defaults write $_prefs disable-shadow -bool $2;
+		defaults write ${_prefs} disable-shadow -bool ${2};
 		killall SystemUIServer;
 		;;
 
 	# Read
 	-r|--read)
-		defaults read $_prefs;
+		defaults read ${_prefs};
 		;;
 
 	# New defaults
 	--fix-defaults)
-		[ ! -d $_picf ] && mkdir -p $_picf && ln -s $_picf $HOME/__scraps;
-		defaults write $_prefs location -string $_picf;
-		defaults write $_prefs name -string Picture;
-		defaults write $_prefs type -string png;
-		defaults write $_prefs disable-shadow -bool true;
+		[ ! -d ${_picf} ] && mkdir -p ${_picf} && ln -s ${_picf} $HOME/__scraps;
+		defaults write ${_prefs} location -string ${_picf};
+		defaults write ${_prefs} name -string Picture;
+		defaults write ${_prefs} type -string png;
+		defaults write ${_prefs} disable-shadow -bool true;
 		killall SystemUIServer;
 
 		sleep 2;
-		echo -e '\nPreferences:\n------------' && defaults read $_prefs;
+		echo -e '\nPreferences:\n------------' && defaults read ${_prefs};
 		echo -e '------------\n';
 		;;
 

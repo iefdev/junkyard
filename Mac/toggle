@@ -9,23 +9,23 @@ ERR=0
 
 function toggleValue()
 {
-    local _item="$1";
+    local _item="${1}";
     STATUS=$(defaults read com.apple.Finder ${_item});
-    [ $STATUS == 1 ] && _bool=false || _bool=true;
+    [ ${STATUS} == 1 ] && _bool=false || _bool=true;
     defaults write com.apple.Finder ${_item} -bool ${_bool};
     killall Finder;
 }
 
-case $1 in
+case ${1} in
     hidden)
         toggleValue "AppleShowAllFiles";
-        ERR=$?;
+        ERR=${?};
         ;;
     desktop)
         toggleValue "CreateDesktop";
-        ERR=$?;
+        ERR=${?};
         ;;
-    *)  echo -e "Usage: $(basename $0) [ hidden | desktop ]\n";
+    *)  echo -e "Usage: $(basename ${0}) [ hidden | desktop ]\n";
         ERR=1
 esac
 
