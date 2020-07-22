@@ -6,7 +6,6 @@
 # Description: A simple script to make compressed archives. It defaults
 #              to xz with a fallback on gz if it’s not installed.
 #
-# mktar: 2020-20-22
 # Usage: mktar [gz|bz2|zst|xz] [file | directory]
 #        mktar foobar.d          # -> foobar.d.tar.xz
 #        mktar gz foobar.d       # -> foobar.d.tar.gz
@@ -25,13 +24,13 @@ fi
 ERR=0;
 
 # Check $1 for extension: xz = default | gz if not installed
-[[ `type xz 2> /dev/null` ]] && _xz='xz' || _xz='gz';
+[[ $(type xz 2> /dev/null) ]] && _xz='xz' || _xz='gz';
 [[ ${1} =~ ^xz$|^zst$|^bz2$|^gz$ ]] && _ext=${1} && shift 1 || _ext=${_xz};
 
 _base=$(basename ${0});
 _path=$(dirname "${1}");
 _dir=$(basename "${1}");
-_excl=`echo --exclude={'.DS_Store','._*'}`;
+_excl=$(echo --exclude={'.DS_Store','._*'});
 
 if [ -e "${1}" ]; then
     cd "${_path}";

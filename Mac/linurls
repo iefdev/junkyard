@@ -19,26 +19,27 @@ echo -e "/* These \"weblocs\" didn't convert into \".desktop\" */\n\n- - -\n\n" 
 find . -name "*.webloc" | while read _file; do
 
 	# Clean up names (:/ -> -). More chars?
-	cleanUp=`basename "$(echo "${_file}")" | sed 's/[\/\:]/\-/g'`;
+	cleanUp=$(basename "$(echo "${_file}")" | sed 's/[\/\:]/\-/g');
 
 	# cleaning any xtra ":" just in case. "/" displays as ":" in Terminal.
-	fileOut=`dirname "$(echo "${_file}")/${cleanUp}" | sed 's/[\:]/\-/g'`;
+	fileOut=$(dirname "$(echo "${_file}")/${cleanUp}" | sed 's/[\:]/\-/g');
 
 	# New extension
-	dtFile=`echo "${fileOut}" | sed 's/webloc/desktop/'`;
-	dtName=`basename "${fileOut}" | sed 's/.webloc//'`;
+	dtFile=$(echo "${fileOut}" | sed 's/webloc/desktop/');
+	dtName=$(basename "${fileOut}" | sed 's/.webloc//');
 
 	# make sure the file(s) are XML, and get the url
 	plutil -convert xml1 "${_file}" 2> /dev/null;
-	dtUrl=`cat "${_file}" | grep -i '<string>.*<\/string>' | sed 's/^.*<string>//;s/<\/string>$//'` 2> /dev/null;
+	dtUrl=$(cat "${_file}" | grep -i '<string>.*<\/string>' | \
+	        sed 's/^.*<string>//;s/<\/string>$//') 2> /dev/null;
 
 	# Having some old ones where they are in "/rsrc"... Try DeRez before dumping them to the log.
 	if [[ -z "${dtUrl}" ]] ; then
-		dtUrl=`DeRez -e -only url "${_file}" | sed -e 's/.*\/\* \(.*\) \*\//\1/' | sed -e :a -e '$!N; s/\n//; ta' -e 's/^.*{\(.*\)};/\1/'`;
+		dtUrl=$(DeRez -e -only url "${_file}" | sed -e 's/.*\/\* \(.*\) \*\//\1/' | sed -e :a -e '$!N; s/\n//; ta' -e 's/^.*{\(.*\)};/\1/');
 	fi
 
 	# Pass path/filename to logfile if it fails.
-	if [[ -z "${dtUrl}" ]] ; then
+	if [[ -z "${dtUrl}" ]]; then
 		echo "${_file}" >> "${dtLog}";
 	else
 

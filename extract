@@ -5,7 +5,6 @@
 #
 # Decription: Script to extract misc archives
 #
-# extract: 2020-02-22
 # Usage: extract <archive> ...
 #        extract fooBar.tar.xz
 #        extract fooBar.tar.xz barBaz.tar.xz
@@ -18,7 +17,7 @@
 # Vars
 ERR=0;
 
-for f in "$@"; do
+for f in "${@}"; do
     _dir=$(dirname "${f}");
     _file=$(basename "${f}");
     _ext="${_file#*.}";
@@ -34,7 +33,7 @@ for f in "$@"; do
             *.Z) (cd "${_dir}" && uncompress "${f}");               ;;
             *.7z) (cd "${_dir}" && 7z x "${f}");                    ;;
             *)
-                echo "$(basename $0): '${_file}' cannot be extracted. '${_ext}' is not supported.";
+                echo "$(basename ${0}): '${_file}' cannot be extracted. '${_ext}' is not supported.";
                 ERR=1;
                 ;;
         esac

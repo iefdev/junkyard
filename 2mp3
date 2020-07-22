@@ -6,7 +6,7 @@
 #
 
 ERR=0;
-_base=$(basename $0);
+_base=$(basename ${0});
 
 [[ ! `type ffmpeg 2> /dev/null` ]] && echo "${_base}: Please install 'ffmpeg'..." && exit 1;
 
@@ -36,13 +36,13 @@ shift "$((OPTIND -1))";
 # Make sure '-q' is an integer, or set to default (320)
 [[ ${kbps} =~ ^[0-9]+$ ]] || kbps='320';
 
-for file in "$@"; do
+for file in "${@}"; do
     [ ! -f "${file}" ] && echo "${_base}: \"${file}\" doesn't exist" && exit 1;
     [[ ${file##*.} == 'mp3' ]] && echo "${_base}: \"${file}\" is already an mp3 file" && exit 1;
     ffmpeg -i "${file}" -b:a ${kbps}k \
         -metadata title="$(echo $(basename "${file%.*}") | sed 's/_/ /g')" \
         $(echo "${file%.*}.mp3" | sed 's/[[:space:]]/_/g');
-    ERR=$?;
+    ERR=${?};
 done
 
 exit ${ERR};

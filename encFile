@@ -14,7 +14,7 @@
 ERR=0;
 _base=$(basename ${0});
 
-[[ ! `type openssl 2> /dev/null` ]] && echo "${_base}: Please install: openssl" && exit 1;
+[[ ! $(type openssl 2> /dev/null) ]] && echo "${_base}: Please install: openssl" && exit 1;
 
 while getopts ":c:h" opt; do
     case ${opt} in

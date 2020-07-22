@@ -9,7 +9,7 @@
 
 
 # Run as root
-[[ $EUID -ne 0 ]] && echo -e "$(basename $0): This script must be run as root\n" 1>&2 && exit 1;
+[[ ${EUID} -ne 0 ]] && echo -e "$(basename $0): This script must be run as root\n" 1>&2 && exit 1;
 
 # Vars
 ERR=0;
@@ -21,14 +21,14 @@ _file='/usr/lib/libcurl.4.dylib';
 if [ -h ${_file} ]; then
     mv ${_file}{.orig,};
     echo ":: Moving back to the original file...";
-    ERR=$?;
+    ERR=${?};
 else
     # make sure to keep a bak of the original
     [ -f ${_file}.orig.bak ] || cp ${_file}{,.orig.bak};
     mv ${_file}{,.orig};
     ln -s /opt/local/lib/libcurl.4.dylib ${_file};
     echo ":: Using the symlink...";
-    ERR=$?;
+    ERR=${?};
 fi
 
 ls -AhlG ${_file};
