@@ -12,7 +12,7 @@
 #     mkpwd          20 character pwd
 #     mkpwd 32       32 character pwd
 #     mkpwd 24 10    10x 24-character pwds
-#     mkpwd 0 10     10x 20-character pwds
+#     mkpwd 0 10     10x 16-character pwds
 #
 
 PWD_LENGTH=20;
