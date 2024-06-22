@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 #
-# Description: Script to sync your forks, incl branches and tags.
-#              // A modified version of: https://git.io/vh10n
+# Description:
+#   Script to sync your forks, incl branches and tags.
+#   // A modified version of: https://git.io/vh10n
 #
-# Usage: forkSync <upstream-remote> <target-remote>
-#        forkSync          # upstream origin (default values)
-#        forkSync foo bar  # foo bar
-#        forkSync foo      # foo origin
-#        forkSync '' bar   # upstream bar
+# Usage:
+#   forkSync <upstream-remote> <target-remote>
+#   forkSync          # upstream origin (default values)
+#   forkSync foo bar  # foo bar
+#   forkSync foo      # foo origin
+#   forkSync '' bar   # upstream bar
 #
 
 # Help
-[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '6,10p' ${0} && exit 1;
+[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '6,13p' ${0} && exit 1;
 
 # Vars
 _upstream=${1:-'upstream'};

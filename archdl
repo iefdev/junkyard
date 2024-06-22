@@ -2,11 +2,9 @@
 #
 # Downloading Arch ISOFile(s)
 #
-#
 
 # Mirror (Umeå, Swe)
 _mirror='https://ftp.acc.umu.se';
-
 
 # Vars
 _dir=$(date "+%Y-%m-${1:-01}");

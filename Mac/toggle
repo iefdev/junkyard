@@ -3,7 +3,8 @@
 # /usr/local/xbin/toggle
 #
 #
-# Description: Script to toggle things, like hidden files, desktop icons..
+# Description:
+#   Script to toggle things, like hidden files, desktop icons..
 #
 
 ERR=0

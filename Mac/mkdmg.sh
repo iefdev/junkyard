@@ -2,16 +2,19 @@
 #
 # ~/ShellScripts/mkdmg.sh
 #
-# Author: Eric F
-# Copy: (c) 2014 Eric F (iEFdev)
 #
-# Description: A bash script to create a disk image from a folder (incl. encryption and password).
+# Author:       Eric F
+# Copyright:    (c) 2024 Eric F (iefdev)
+# Description:  A bash script to create a disk image from a
+#               folder (incl. encryption and password).
 #
 # The script is built around the command:
-# hdiutil create -srcfolder "/path/to/folder" -format UDBZ -encryption AES-256 -agentpass "/path/to/dest"
+#   hdiutil create -srcfolder "/path/to/folder" \
+#   -format UDBZ -encryption AES-256 -agentpass "/path/to/dest"
 #
 # Example:
-# hdiutil create -srcfolder "~/Desktop/FooBar/" -format UDBZ -encryption AES-256 -agentpass "~/Dropbox/FooBar.dmg"
+#   hdiutil create -srcfolder "~/Desktop/FooBar/" \
+#   -format UDBZ -encryption AES-256 -agentpass "~/Dropbox/FooBar.dmg"
 #
 #
 
@@ -103,7 +106,7 @@ Destination...
   :» Disk name: "$(basename ${_folder}).dmg". If you'd like another name of the disk,
   :» write that in the end (+ .dmg). Example: "Backup.dmg"
 
-You can type the path in, or just drag'n'drop the folder into the terminal window.
+You can type the path in, or just drag'n'drop the folder into the Terminal window.
 
 DEST
 	 __dmgdest

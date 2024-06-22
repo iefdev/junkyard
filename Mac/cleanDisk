@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-#
 # /usr/local/xbin/cleanDisk
+#
 #
 # Descritption:
 #     Script to clean up external disks on OS X/macOS

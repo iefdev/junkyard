@@ -2,14 +2,16 @@
 #
 # /usr/local/xbin/encFile
 #
-# Description: Encrypt or Decrypt files with openssl
+# Description:
+#   Encrypt or Decrypt files with openssl
 #
-
-# Since openssl 1.1.1b
-# *** WARNING : deprecated key derivation used.
-# Using -iter or -pbkdf2 would be better.
+#
+# Since openssl 1.1.1b:
+#   *** WARNING : deprecated key derivation used.
+#   Using -iter or -pbkdf2 would be better.
 #
 # Supress it, for now (2> /dev/null)
+#
 
 ERR=0;
 _base=$(basename ${0});

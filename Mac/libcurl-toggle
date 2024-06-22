@@ -3,8 +3,12 @@
 # /usr/local/xbin/libcurl-toggle
 #
 #
-# Description: Script to toggle /usr/lib/libcurl.4.dylib
-#              between to orig (apple) and a newer (macports)
+# Description:
+#   Script to toggle /usr/lib/libcurl.4.dylib
+#   between to orig (apple) and a newer (macports)
+#
+#   /* This is if you're on an older Mac, with an older
+#   version of libcurl. */
 #
 
 

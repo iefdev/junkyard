@@ -2,12 +2,14 @@
 #
 # /usr/local/xbin
 #
-# Description: Script to convert OS X .webloc's into Linux .desktop files
-# (To use .desktop in Firefox/OS X, just open an info window, changing the
-# program to FF and apply/change all. :))
+# Description:
+#   Script to convert OS X .webloc's into Linux .desktop files
+#   (To use .desktop in Firefox/OS X, just open an info window,
+#   changing the program to FF and apply/change all. :))
 #
-# Disclainer: You use this script AT YOUR OWN RISK, and it comes with NO WARRANTY.
-# It's been made for my own personal use.
+# Disclainer:
+#   You use this script AT YOUR OWN RISK, and it comes with NO WARRANTY.
+#   It's been made for my own personal use.
 #
 
 # Put a log in current directory of the ones who didn't make it.
@@ -46,10 +48,11 @@ find . -name "*.webloc" | while read _file; do
 		# Just follow the freedesktop standard...
 		cat << WEBLOC > "${dtFile}"
 [Desktop Entry]
-Encoding=UTF-8
+Version=1.0
 Type=Link
-Icon=text-html
 Name=$dtName
+Comment=
+Icon=text-html
 URL=$dtUrl
 WEBLOC
 

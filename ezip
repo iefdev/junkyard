@@ -3,13 +3,13 @@
 #
 # /usr/local/xbin/ezip
 #
-# version: 2.0
+# Version:      2.0
+# Author:       Eric F
+# Copyright:    (c) 2024, Eric F
 #
-# author: Eric F
-# copy: (c) 2015, Eric F
-#
-# Description: Simple shellscript to zip files from Terminal, leaving
-# certain files alone. (See more details in: "ReadMe").
+# Description:
+#   Simple shellscript to zip files from Terminal, leaving
+#   certain files alone. (See more details in: "ReadMe").
 #
 
 # Settings (optional)

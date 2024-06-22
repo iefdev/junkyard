@@ -2,13 +2,10 @@
 #
 # /usr/local/bin/shasum
 #
-# Description: (2015-03-28)
-# Dirty hack to get "shasum" (OS X style) onboard. Linux have "shaNNNsum",
-# so as a wrapper &/or to use with other scripts as a layer.
 #
-# --------------------------------------------------------------------------
-#
-# OS X shasum(1): https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/shasum.1.html
+# Description:
+#   Dirty hack to get "shasum" (OS X style) onboard. Linux have "shaNNNsum",
+#   so as a wrapper &/or to use with other scripts as a layer.
 #
 
 # What SHA? No option defaults to SHA1

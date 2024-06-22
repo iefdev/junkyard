@@ -2,11 +2,13 @@
 #
 # /usr/local/xbin/scraps
 #
-# Author: Eric F
-# Copyright: 2017, Eric F
-# License: WTFPL, http://www.wtfpl.net/txt/copying/
 #
-# Description: A simple bash script to set/change settings for Screen Captures in OS X
+# Author:       Eric F
+# Copyright:    2024, Eric F
+# License:      WTFPL, http://www.wtfpl.net/txt/copying/
+#
+# Description:  A simple bash script to set/change settings
+#               for Screen Captures in OS X
 #
 
 # Oops
