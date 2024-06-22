@@ -3,20 +3,23 @@
 # /usr/local/xbin/extract
 #
 #
-# Decription: Script to extract misc archives
+# Decription:
+#   Script to extract misc archives
 #
-# Usage: extract <archive> ...
-#        extract fooBar.tar.xz
-#        extract fooBar.tar.xz barBaz.tar.xz
-#        extract ./**/*.tar.xz
+# Usage:
+#   extract <archive> ...
+#   extract fooBar.tar.xz
+#   extract fooBar.tar.xz barBaz.tar.xz
+#   extract ./**/*.tar.xz
 #
 
 # Help
-[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '8,12p' ${0} && exit 1;
+[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '8,14p' ${0} && exit 1;
 
 # Vars
 ERR=0;
 
+# Looper
 for f in "${@}"; do
     _dir=$(dirname "${f}");
     _file=$(basename "${f}");
@@ -24,14 +27,15 @@ for f in "${@}"; do
 
     if [ -f "${f}" ]; then
         case "${f}" in
-            *.tar.xz|*.txz) tar -Jxvf "${f}" -C "${_dir}";          ;;
-            *.tar.zst|*.tzst) tar --zstd -xvf "${f}" -C "${_dir}";  ;;
-            *.tar.bz2|*.bz2|*.tbz2) tar -jxvf "${f}" -C "${_dir}";  ;;
-            *.tar.gz|*.gz|*.tgz) tar -zxvf "${f}" -C "${_dir}";     ;;
-            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";              ;;
-            *.rar) (cd "${_dir}" && unrar x "${f}");                ;;
-            *.Z) (cd "${_dir}" && uncompress "${f}");               ;;
-            *.7z) (cd "${_dir}" && 7z x "${f}");                    ;;
+            *.tar.xz|*.txz) tar -Jxvf "${f}" -C "${_dir}";              ;;
+            *.tar.zst|*.tzst) tar --zstd -xvf "${f}" -C "${_dir}";      ;;
+            *.tar.bz2|*.bz2|*.tbz2) tar -jxvf "${f}" -C "${_dir}";      ;;
+            *.tar.gz|*.gz|*.tgz) tar -zxvf "${f}" -C "${_dir}";         ;;
+            *.tar|*.zip) tar -xvf "${f}" -C "${_dir}";                  ;;
+            *.tar.lz4) (cd "${_dir}" && lz4 -d "${f}" -c | tar -xvf -); ;;
+            *.rar) (cd "${_dir}" && unrar x "${f}");                    ;;
+            *.Z) (cd "${_dir}" && uncompress "${f}");                   ;;
+            *.7z) (cd "${_dir}" && 7z x "${f}");                        ;;
             *)
                 echo "$(basename ${0}): '${_file}' cannot be extracted. '${_ext}' is not supported.";
                 ERR=1;

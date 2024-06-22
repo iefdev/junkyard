@@ -3,12 +3,14 @@
 # /usr/local/xbin/mktar
 #
 #
-# Description: A simple script to make compressed archives. It defaults
-#              to xz with a fallback on gz if it’s not installed.
+# Description:
+#   A simple script to make compressed archives. It defaults
+#   to xz with a fallback on gz if it’s not installed.
 #
-# Usage: mktar [gz|bz2|zst|xz] [file | directory]
-#        mktar foobar.d          # -> foobar.d.tar.xz
-#        mktar gz foobar.d       # -> foobar.d.tar.gz
+# Usage:
+#   mktar [gz|bz2|zst|xz] [file | directory]
+#   mktar foobar.d          # -> foobar.d.tar.xz
+#   mktar gz foobar.d       # -> foobar.d.tar.gz
 #
 
 # OS X / macOS env's, incase they're not set already
@@ -18,7 +20,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
 fi
 
 # Help
-[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '9,12p' ${0} && exit 1;
+[[ ${#} < 1 || ${1} == '-h' ]] && sed -n '9,14p' ${0} && exit 1;
 
 # Vars
 ERR=0;
@@ -32,16 +34,19 @@ _path=$(dirname "${1}");
 _dir=$(basename "${1}");
 _excl=$(echo --exclude={'.DS_Store','._*'});
 
+# Looper
 if [ -e "${1}" ]; then
     cd "${_path}";
 
     case ${_ext} in
-        gz)     tar -cvzf "${_dir}".tar.${_ext} ${_excl} "${_dir}"; ;;
-        bz2)    tar -cvjf "${_dir}".tar.${_ext} ${_excl} "${_dir}"; ;;
-        zst)    tar -cvf - ${_ecxl} "${_dir}" \
-                | zstd -T2 --ultra -22 > "${_dir}".tar.${_ext};     ;;
+        bz2)    tar -cvjf "${_dir}".tar.${_ext} ${_excl} "${_dir}";     ;;
+        gz)     tar -cvzf "${_dir}".tar.${_ext} ${_excl} "${_dir}";     ;;
+        lz4)    tar -cvf - ${_excl} "${_dir}" \
+                | lz4 -v9 > "${_dir}".tar.${_ext};                      ;;
         xz)     tar -cvf - ${_excl} "${_dir}" \
-                | xz -6e > "${_dir}".tar.${_ext};                   ;;
+                | xz -6e > "${_dir}".tar.${_ext};                       ;;
+        zst)    tar -cvf - ${_ecxl} "${_dir}" \
+                | zstd -T2 --ultra -22 > "${_dir}".tar.${_ext};         ;;
         *)
             echo -e ":: ${_base}: Could not create '${_dir}.tar.${_ext}'\n";
             ERR=1;
